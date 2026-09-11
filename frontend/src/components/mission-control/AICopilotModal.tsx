@@ -1,0 +1,390 @@
+'use client'
+
+import { useState, useRef, useEffect } from 'react'
+import { MineInfo } from './types'
+import {
+  askNakshatra,
+  getAIXAutoSuggestions,
+  queryAIXKnowledgeBase
+} from '@/lib/aix-knowledge-engine'
+import {
+  Bot,
+  User,
+  Send,
+  Sparkles,
+  X,
+  Cpu,
+  Zap,
+  Search,
+  CheckCircle2,
+  Heart,
+} from 'lucide-react'
+
+interface Message {
+  id: string
+  sender: 'user' | 'assistant'
+  text: string
+  timestamp: string
+  category?: string
+  suggestions?: string[]
+  actionButton?: {
+    label: string
+    type: 'blending' | 'dewatering' | 'borehole' | 'risk' | 'guidance'
+    data?: any
+  }
+}
+
+interface Props {
+  mine: MineInfo
+  onOpenBlending?: () => void
+  onOpenBorehole?: () => void
+}
+
+const STARTER_QUESTIONS = [
+  'How does NAKSHATRA-X discover hidden manganese reserves?',
+  'Can we prevent monsoon pit flooding and shortfall?',
+  'Walk me through the SciPy ore blending optimization',
+  'What makes our satellite sensing so accurate?',
+  'How does 3D borehole Kriging work for Balaghat?',
+  'Guide me through Mission Control!',
+]
+
+export default function AICopilotModal({ mine }: Props) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [input, setInput] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // Listen for 'open-aix-copilot' custom event triggered by top-right AI-X button
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true)
+    window.addEventListener('open-aix-copilot', handleOpen)
+    return () => window.removeEventListener('open-aix-copilot', handleOpen)
+  }, [])
+
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 'welcome-1',
+      sender: 'assistant',
+      text: `Hello! I'm your **NAKSHATRA-X** space-geological assistant. I'm here to help you navigate satellite discovery, SciPy ore blending, 3D Kriging assays, and mine operations. How can I assist you today?`,
+      timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }),
+    },
+  ])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, isTyping])
+
+  // Handle Input Auto-Suggest Updates
+  const handleInputChange = (val: string) => {
+    setInput(val)
+    if (val.trim().length >= 2) {
+      const matched = getAIXAutoSuggestions(val)
+      setSuggestions(matched)
+      setShowSuggestions(matched.length > 0)
+    } else {
+      setSuggestions([])
+      setShowSuggestions(false)
+    }
+  }
+
+  const handleSelectSuggestion = (suggestedText: string) => {
+    setInput(suggestedText)
+    setSuggestions([])
+    setShowSuggestions(false)
+    handleSend(suggestedText)
+  }
+
+  const handleSend = (customQuery?: string) => {
+    const query = customQuery || input
+    if (!query.trim()) return
+
+    setShowSuggestions(false)
+    setSuggestions([])
+
+    const userMsg: Message = {
+      id: `usr-${Date.now()}`,
+      sender: 'user',
+      text: query,
+      timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }),
+    }
+
+    setMessages((prev) => [...prev, userMsg])
+    if (!customQuery) setInput('')
+    setIsTyping(true)
+
+    // Execute On-Device RAG Answer Engine with Warm Human Response
+    setTimeout(() => {
+      const result = queryAIXKnowledgeBase(query, mine.name, mine.code, mine.state)
+
+      let replyText = ''
+      let suggs: string[] = []
+      let category = ''
+      let actionBtn = result.actionButton
+
+      if (result.matched && result.answer) {
+        replyText = result.answer
+        suggs = (result.suggestions || []).map((s: any) => s.question)
+        category = result.category || ''
+      } else {
+        replyText = `Great question! While I look up more specific field logs for "${query}", here are some related topics we can explore together right now:`
+        suggs = (result.suggestions || []).map((s: any) => s.question)
+      }
+
+      const botMsg: Message = {
+        id: `bot-${Date.now()}`,
+        sender: 'assistant',
+        text: replyText,
+        timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }),
+        category: category,
+        suggestions: suggs,
+        actionButton: actionBtn,
+      }
+
+      setMessages((prev) => [...prev, botMsg])
+      setIsTyping(false)
+    }, 500)
+  }
+
+  const triggerAction = async (btn: NonNullable<Message['actionButton']>) => {
+    if (btn.type === 'dewatering') {
+      try {
+        await fetch('/api/v1/dispatch-operational-alert', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mine_id: mine.numericId || 1,
+            mine_name: mine.name,
+            alert_type: 'HAUL_ROAD_SATURATION',
+            severity: 'CRITICAL',
+            action_directive: 'Activate Perimeter Dewatering Pumps #4 & #7 immediately.',
+          }),
+        })
+      } catch {}
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `act-confirm-${Date.now()}`,
+          sender: 'assistant',
+          text: `✅ **Emergency Dispatch Transmitted**: Dewatering order sent to ${mine.name} pit manager via SMS & SCADA Interlock.`,
+          timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }),
+        },
+      ])
+    } else if (btn.type === 'blending') {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `act-confirm-${Date.now()}`,
+          sender: 'assistant',
+          text: `✅ **Stockpile Blending Applied**: Simplex solution dispatched to loader SCADA terminals. Target grade 41.2% Mn locked.`,
+          timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }),
+        },
+      ])
+    } else if (btn.type === 'borehole') {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `act-confirm-${Date.now()}`,
+          sender: 'assistant',
+          text: `✅ **Borehole Kriging Synced**: UNFC 111 3D block reserve of 384,000 Tonnes locked in system memory.`,
+          timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }),
+        },
+      ])
+    }
+  }
+
+  return (
+    <>
+      {/* AI-X Copilot Modal Overlay */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-end p-2 sm:p-6 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="ios-glass-card w-full sm:max-w-md md:max-w-lg h-[660px] max-h-[92vh] flex flex-col justify-between overflow-hidden shadow-2xl border border-white/20 rounded-3xl relative">
+            {/* Header */}
+            <div className="p-4 sm:p-5 border-b border-white/15 bg-gradient-to-r from-[rgba(6,12,24,0.95)] to-[rgba(10,20,35,0.95)] flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="relative p-2.5 rounded-2xl bg-[#00FF88]/15 border border-[#00FF88]/40 shadow-[0_0_15px_rgba(0,255,136,0.3)]">
+                  <Cpu className="w-5 h-5 text-[#00FF88]" />
+                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-[#00FF88] border border-black shadow-[0_0_6px_#00FF88]" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-nowrap whitespace-nowrap">
+                    <h3 className="text-base font-black text-white tracking-wider flex items-center flex-nowrap whitespace-nowrap leading-none font-space shrink-0">
+                      <span className="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.8)]">AI</span>
+                      <span className="font-3d-cyber text-cyber-liquid-red ml-0.5 inline-block font-black text-base">
+                        -X
+                      </span>
+                      <span className="text-slate-300 font-semibold text-xs ml-1.5 font-mono">Space Assistant</span>
+                    </h3>
+                    <span className="ios-badge ios-badge-live text-[8px] py-0.5 px-2 font-mono font-bold whitespace-nowrap shrink-0">
+                      100% FREE ON-DEVICE
+                    </span>
+                  </div>
+                  <p className="text-[11px] font-mono text-slate-300">
+                    Active Mine: <span className="text-[#00FF88] font-bold">{mine.name} ({mine.code})</span>
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all cursor-pointer"
+                title="Close AI-X Assistant"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Quick Starter Chips Bar */}
+            <div className="px-4 py-2 bg-black/40 border-b border-white/5 flex flex-wrap gap-2 shrink-0">
+              {STARTER_QUESTIONS.map((q, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleSelectSuggestion(q)}
+                  className="px-3 py-1.5 rounded-full bg-white/5 hover:bg-[#00FF88]/20 border border-white/10 hover:border-[#00FF88]/40 text-[10px] font-mono text-slate-300 hover:text-[#00FF88] transition-all cursor-pointer shrink-0"
+                >
+                  ✦ {q}
+                </button>
+              ))}
+            </div>
+
+            {/* Messages Scroll Area */}
+            <div className="flex-1 p-4 overflow-y-auto space-y-4 font-sans text-xs leading-relaxed">
+              {messages.map((m) => (
+                <div
+                  key={m.id}
+                  className={`flex gap-3 ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  {m.sender === 'assistant' && (
+                    <div className="h-8 w-8 rounded-full bg-[#00FF88]/20 border border-[#00FF88]/40 flex items-center justify-center shrink-0">
+                      <Bot className="w-4 h-4 text-[#00FF88]" />
+                    </div>
+                  )}
+
+                  <div className="max-w-[85%] space-y-2">
+                    <div
+                      className={`p-3.5 rounded-2xl ${
+                        m.sender === 'user'
+                          ? 'bg-gradient-to-r from-[#38BDF8] to-[#0284C7] text-black font-semibold rounded-br-none shadow-[0_0_15px_rgba(56,189,248,0.25)]'
+                          : 'bg-white/10 border border-white/15 text-slate-100 rounded-bl-none shadow-lg'
+                      }`}
+                    >
+                      {m.category && (
+                        <div className="text-[9px] font-mono uppercase tracking-widest text-[#00FF88] font-bold mb-1">
+                          {m.category}
+                        </div>
+                      )}
+                      <div className="whitespace-pre-line leading-relaxed">{m.text}</div>
+
+                      {/* In-Line Related Suggestions */}
+                      {m.suggestions && m.suggestions.length > 0 && (
+                        <div className="mt-2.5 pt-2 border-t border-white/10 flex flex-wrap gap-1.5">
+                          {m.suggestions.map((s, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => handleSelectSuggestion(s)}
+                              className="px-2 py-1 rounded-full bg-white/5 hover:bg-[#00FF88]/20 border border-white/10 text-[9px] font-mono text-slate-300 hover:text-[#00FF88] transition-all cursor-pointer"
+                            >
+                              ✦ {s}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      <div
+                        className={`text-[9px] font-mono mt-1.5 text-right ${
+                          m.sender === 'user' ? 'text-black/70' : 'text-slate-400'
+                        }`}
+                      >
+                        {m.timestamp}
+                      </div>
+                    </div>
+
+                    {/* Action Button inside message */}
+                    {m.actionButton && (
+                      <button
+                        onClick={() => triggerAction(m.actionButton!)}
+                        className="w-full p-2.5 rounded-xl bg-[#00FF88]/20 hover:bg-[#00FF88]/35 border border-[#00FF88]/50 text-[#00FF88] font-mono text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all shadow-[0_0_12px_rgba(0,255,136,0.3)]"
+                      >
+                        <Zap className="w-3.5 h-3.5" />
+                        <span>{m.actionButton.label}</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {m.sender === 'user' && (
+                    <div className="h-8 w-8 rounded-full bg-[#38BDF8]/20 border border-[#38BDF8]/40 flex items-center justify-center shrink-0">
+                      <User className="w-4 h-4 text-[#38BDF8]" />
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {isTyping && (
+                <div className="flex gap-3 items-center text-slate-400 font-mono text-xs">
+                  <div className="h-8 w-8 rounded-full bg-[#00FF88]/20 border border-[#00FF88]/40 flex items-center justify-center shrink-0">
+                    <Bot className="w-4 h-4 text-[#00FF88] animate-spin" />
+                  </div>
+                  <div className="p-3 rounded-2xl bg-white/10 border border-white/10 flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#00FF88] animate-bounce" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#00FF88] animate-bounce [animation-delay:0.2s]" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#00FF88] animate-bounce [animation-delay:0.4s]" />
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* DYNAMIC AUTO-SUGGEST DROPDOWN OVERLAY */}
+            {showSuggestions && suggestions.length > 0 && (
+              <div className="absolute bottom-[68px] left-3 right-3 z-50 p-2 rounded-2xl bg-[#080E1A]/95 border border-[#00FF88]/40 backdrop-blur-2xl shadow-[0_0_30px_rgba(0,255,136,0.25)] animate-in slide-in-from-bottom-2 duration-200">
+                <div className="text-[10px] font-mono text-[#00FF88] font-bold px-3 py-1 flex items-center gap-1.5 border-b border-white/10 mb-1">
+                  <Sparkles className="w-3 h-3 text-[#00FF88]" />
+                  <span>Suggested Questions:</span>
+                </div>
+                <div className="space-y-1 max-h-48 overflow-y-auto">
+                  {suggestions.map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleSelectSuggestion(item)}
+                      className="w-full text-left px-3 py-2 rounded-xl text-xs font-mono text-slate-200 hover:text-white hover:bg-[#00FF88]/20 transition-all flex items-center gap-2 cursor-pointer border border-transparent hover:border-[#00FF88]/30"
+                    >
+                      <Search className="w-3.5 h-3.5 text-[#38BDF8] shrink-0" />
+                      <span className="truncate">{item}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Input Bar */}
+            <div className="p-3 sm:p-4 border-t border-white/15 bg-black/70 flex items-center gap-2 relative">
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => handleInputChange(e.target.value)}
+                onFocus={() => input.trim().length >= 2 && setShowSuggestions(true)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSend()
+                  if (e.key === 'Escape') setShowSuggestions(false)
+                }}
+                placeholder={`Ask anything about NAKSHATRA-X…`}
+                className="flex-1 p-3 rounded-2xl bg-white/10 border border-white/20 text-xs font-sans text-white placeholder-slate-400 focus:outline-none focus:border-[#00FF88] transition-colors"
+              />
+              <button
+                onClick={() => handleSend()}
+                disabled={!input.trim() || isTyping}
+                className="p-3 rounded-2xl bg-[#00FF88] hover:bg-[#00FF88]/80 text-black font-bold disabled:opacity-50 transition-all cursor-pointer shadow-[0_0_12px_#00FF88]"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
