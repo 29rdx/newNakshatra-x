@@ -5,7 +5,6 @@ import { useRouter, usePathname } from 'next/navigation'
 import {
   Satellite,
   Cpu,
-  Brain,
   Activity,
   Layers,
   ShieldAlert,
@@ -48,12 +47,6 @@ const NAV_ITEMS: NavItem[] = [
     icon: Box,
     targetId: 'mine-twin',
     badge: 'TWIN',
-  },
-  {
-    id: 'reserve',
-    label: 'Reserve AI',
-    icon: Brain,
-    targetId: 'reserve-intelligence',
   },
   {
     id: 'production',

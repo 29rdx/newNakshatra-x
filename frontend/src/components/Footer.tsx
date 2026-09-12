@@ -14,7 +14,6 @@ export default function Footer() {
         <div className="footer-links">
           <div className="footer-col">
             <h4>Product</h4>
-            <Link href="/#reserve-intelligence">Reserve AI</Link>
             <Link href="/#production-sentinel">Production Sentinel</Link>
             <Link href="/#smart-blending">Ore Blending</Link>
             <Link href="/#mine-twin">Mine Twin</Link>

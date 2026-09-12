@@ -5,7 +5,6 @@ import { FALLBACK_MINES, fetchLiveMineTelemetry, fetchMines } from './data'
 import {
   MineInfo,
   WeatherSignal,
-  ReservePrediction,
   ProductionForecast,
   RiskAnalysis,
   ShapExplanation,
@@ -16,7 +15,6 @@ import {
 import IndiaSatelliteMap, { LayerType } from './IndiaSatelliteMap'
 import JudgesArchitectureDeck from './JudgesArchitectureDeck'
 import RealtimeMLTrainingStudio from './RealtimeMLTrainingStudio'
-import ReserveIntelligence from './ReserveIntelligence'
 import ProductionSentinel from './ProductionSentinel'
 import RiskCockpit from './RiskCockpit'
 import ActionCenter from './ActionCenter'
@@ -53,7 +51,6 @@ export default function MissionControlDashboard() {
   const [activeLayer, setActiveLayer] = useState<LayerType>('satellite')
 
   const [weather, setWeather] = useState<WeatherSignal | null>(null)
-  const [reserve, setReserve] = useState<ReservePrediction | null>(null)
   const [forecast, setForecast] = useState<ProductionForecast | null>(null)
   const [risk, setRisk] = useState<RiskAnalysis | null>(null)
   const [shap, setShap] = useState<ShapExplanation | null>(null)
@@ -70,7 +67,6 @@ export default function MissionControlDashboard() {
     try {
       const data = await fetchLiveMineTelemetry(mine)
       setWeather(data.weather)
-      setReserve(data.reserve)
       setForecast(data.forecast)
       setRisk(data.risk)
       setShap(data.shap)
@@ -290,21 +286,18 @@ export default function MissionControlDashboard() {
         </div>
 
         {/* ============================================================
-            STAGE 2: RESERVE PREDICTION & PRODUCTION SENTINEL
+            STAGE 1: PRODUCTION SENTINEL & EXTRACTION FORECAST
             ============================================================ */}
-        <div id="reserve-intelligence" className="space-y-4 scroll-mt-24">
+        <div id="production-sentinel" className="space-y-4 scroll-mt-24">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-[#00FF88]" />
             <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#00FF88]">
-              STAGE 01 &bull; SATELLITE RESERVE PREDICTION & PRODUCTION SENTINEL
+              STAGE 01 &bull; PRODUCTION SENTINEL &amp; EXTRACTION FORECAST
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <ReserveIntelligence mine={selectedMine} reserve={reserve} />
-            <div id="production-sentinel" className="scroll-mt-24">
-              <ProductionSentinel mine={selectedMine} forecast={forecast} risk={risk} />
-            </div>
+          <div>
+            <ProductionSentinel mine={selectedMine} forecast={forecast} risk={risk} />
           </div>
         </div>
 
