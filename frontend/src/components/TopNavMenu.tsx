@@ -173,7 +173,7 @@ export default function TopNavMenu() {
   return (
     <>
       {/* Desktop / Tablet Clean Liquid Glass Navigation Capsule */}
-      <nav className="hidden lg:flex items-center gap-1 cyber-nav-pill px-2.5 py-1 shadow-xl max-w-full overflow-x-auto no-scrollbar">
+      <nav className="hidden lg:flex items-center gap-2 cyber-nav-pill px-3 py-1.5 shadow-xl max-w-full overflow-x-auto no-scrollbar">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon
           const isActive = activeTab === item.id
@@ -186,7 +186,7 @@ export default function TopNavMenu() {
               type="button"
             >
               <Icon
-                size={13.5}
+                size={15}
                 className={`transition-colors duration-200 shrink-0 ${
                   isActive
                     ? 'text-[#00FF88] drop-shadow-[0_0_8px_#00FF88]'
@@ -194,14 +194,14 @@ export default function TopNavMenu() {
                 }`}
               />
               <span
-                className={`font-space text-[11px] xl:text-[11.5px] font-bold tracking-[0.06em] uppercase transition-colors duration-200 whitespace-nowrap ${
-                  isActive ? 'text-[#00FF88]' : 'text-slate-200 group-hover:text-white'
+                className={`font-space text-[12px] xl:text-[13px] font-extrabold tracking-[0.07em] uppercase transition-colors duration-200 whitespace-nowrap ${
+                  isActive ? 'text-[#00FF88]' : 'text-slate-100 group-hover:text-white'
                 }`}
               >
                 {item.label}
               </span>
               {item.badge && (
-                <span className="ml-1 px-1.5 py-0.5 rounded-full text-[8.5px] font-mono font-bold bg-[#00FF88]/20 text-[#00FF88] border border-[#00FF88]/40 shadow-[0_0_8px_rgba(0,255,136,0.3)] leading-none">
+                <span className="ml-1.5 px-2 py-0.5 rounded-full text-[9px] font-mono font-extrabold bg-[#00FF88]/20 text-[#00FF88] border border-[#00FF88]/40 shadow-[0_0_8px_rgba(0,255,136,0.3)] leading-none">
                   {item.badge}
                 </span>
               )}
@@ -222,7 +222,7 @@ export default function TopNavMenu() {
 
       {/* Mobile Dropdown Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed top-[64px] md:top-[80px] left-0 right-0 p-4 bg-[#050914]/98 backdrop-blur-3xl border-b border-[#38BDF8]/30 shadow-2xl z-50 flex flex-col gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="lg:hidden fixed top-[64px] md:top-[80px] left-0 right-0 p-4 bg-[#050914]/98 backdrop-blur-3xl border-b border-[#38BDF8]/30 shadow-2xl z-50 flex flex-col gap-2.5 animate-in fade-in slide-in-from-top-2 duration-200">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon
             const isActive = activeTab === item.id
@@ -231,24 +231,24 @@ export default function TopNavMenu() {
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item)}
-                className={`flex items-center justify-between p-3.5 rounded-xl transition-all duration-200 border ${
+                className={`flex items-center justify-between p-4 rounded-xl transition-all duration-200 border ${
                   isActive
                     ? 'bg-[#38BDF8]/20 border-[#38BDF8]/60 text-white shadow-[0_0_16px_rgba(56,189,248,0.3)]'
                     : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
                 }`}
                 type="button"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3.5">
                   <Icon
-                    size={16}
+                    size={18}
                     className={isActive ? 'text-[#00FF88]' : 'text-[#38BDF8]'}
                   />
-                  <span className="font-space text-xs font-bold tracking-wider uppercase text-white">
+                  <span className="font-space text-sm font-extrabold tracking-wider uppercase text-white">
                     {item.label}
                   </span>
                 </div>
                 {item.badge && (
-                  <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-[#00FF88]/25 text-[#00FF88] border border-[#00FF88]/50 shadow-[0_0_8px_#00FF88]">
+                  <span className="px-2.5 py-0.5 rounded-full text-[9.5px] font-mono font-extrabold bg-[#00FF88]/25 text-[#00FF88] border border-[#00FF88]/50 shadow-[0_0_8px_#00FF88]">
                     {item.badge}
                   </span>
                 )}
