@@ -54,8 +54,14 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+# Python env directories (anchored or env-scoped)
+env/lib/
+venv/lib/
+.venv/lib/
+/lib/
+/lib64/
+!frontend/src/lib/
+!frontend/src/app/lib/
 parts/
 sdist/
 var/
