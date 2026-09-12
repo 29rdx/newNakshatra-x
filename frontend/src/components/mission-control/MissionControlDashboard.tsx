@@ -8,7 +8,6 @@ import {
   ProductionForecast,
   RiskAnalysis,
   ShapExplanation,
-  ActionOrder,
   AuditRecord,
   STACScene,
 } from './types'
@@ -17,7 +16,6 @@ import JudgesArchitectureDeck from './JudgesArchitectureDeck'
 import RealtimeMLTrainingStudio from './RealtimeMLTrainingStudio'
 import ProductionSentinel from './ProductionSentinel'
 import RiskCockpit from './RiskCockpit'
-import ActionCenter from './ActionCenter'
 import SmartOreBlendingModal from './SmartOreBlendingModal'
 import MineTwinPanel from '@/components/mine-twin/MineTwinPanel'
 import SpaceDustParticles from './SpaceDustParticles'
@@ -54,7 +52,6 @@ export default function MissionControlDashboard() {
   const [forecast, setForecast] = useState<ProductionForecast | null>(null)
   const [risk, setRisk] = useState<RiskAnalysis | null>(null)
   const [shap, setShap] = useState<ShapExplanation | null>(null)
-  const [actions, setActions] = useState<ActionOrder[]>([])
   const [audit, setAudit] = useState<AuditRecord | null>(null)
   const [stacScenes, setStacScenes] = useState<STACScene[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -70,7 +67,6 @@ export default function MissionControlDashboard() {
       setForecast(data.forecast)
       setRisk(data.risk)
       setShap(data.shap)
-      setActions(data.actions)
       setAudit(data.audit)
       setStacScenes(data.stacScenes)
       setLastSyncTime(new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: false }))
@@ -319,22 +315,6 @@ export default function MissionControlDashboard() {
             <div id="risk-cockpit" className="h-full scroll-mt-24">
               <RiskCockpit mine={selectedMine} weather={weather} risk={risk} />
             </div>
-          </div>
-        </div>
-
-        {/* ============================================================
-            STAGE 4: PRESCRIPTIVE DIRECTIVES
-            ============================================================ */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#38BDF8]" />
-            <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#38BDF8]">
-              STAGE 04 &bull; PRESCRIPTIVE MITIGATION DIRECTIVES
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 gap-8">
-            <ActionCenter mine={selectedMine} actions={actions} />
           </div>
         </div>
 
