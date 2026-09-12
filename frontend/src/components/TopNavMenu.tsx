@@ -15,8 +15,6 @@ import {
   Mic,
 } from 'lucide-react'
 
-import { HyperText } from '@/components/ui/hyper-text'
-
 export interface NavItem {
   id: string
   label: string
@@ -195,14 +193,13 @@ export default function TopNavMenu() {
                     : 'text-[#38BDF8] group-hover:text-white'
                 }`}
               />
-              <HyperText
-                text={item.label}
-                duration={500}
-                animateOnLoad={false}
+              <span
                 className={`font-space text-[11px] xl:text-[11.5px] font-bold tracking-[0.06em] uppercase transition-colors duration-200 whitespace-nowrap ${
                   isActive ? 'text-[#00FF88]' : 'text-slate-200 group-hover:text-white'
                 }`}
-              />
+              >
+                {item.label}
+              </span>
               {item.badge && (
                 <span className="ml-1 px-1.5 py-0.5 rounded-full text-[8.5px] font-mono font-bold bg-[#00FF88]/20 text-[#00FF88] border border-[#00FF88]/40 shadow-[0_0_8px_rgba(0,255,136,0.3)] leading-none">
                   {item.badge}
@@ -246,12 +243,9 @@ export default function TopNavMenu() {
                     size={16}
                     className={isActive ? 'text-[#00FF88]' : 'text-[#38BDF8]'}
                   />
-                  <HyperText
-                    text={item.label}
-                    duration={500}
-                    animateOnLoad={false}
-                    className="font-space text-xs font-bold tracking-wider uppercase text-white"
-                  />
+                  <span className="font-space text-xs font-bold tracking-wider uppercase text-white">
+                    {item.label}
+                  </span>
                 </div>
                 {item.badge && (
                   <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-[#00FF88]/25 text-[#00FF88] border border-[#00FF88]/50 shadow-[0_0_8px_#00FF88]">

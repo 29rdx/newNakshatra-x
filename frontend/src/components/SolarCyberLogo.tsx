@@ -2,7 +2,6 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { HyperText } from '@/components/ui/hyper-text'
 
 export default function SolarCyberLogo() {
   return (
@@ -66,11 +65,9 @@ export default function SolarCyberLogo() {
 
       {/* HyperText Cyber Typography with Matching Liquid Red -X Locked on Same Line */}
       <div className="flex items-center flex-nowrap whitespace-nowrap shrink-0 leading-none">
-        <HyperText
-          text="NAKSHATRA"
-          duration={600}
-          className="font-3d-cyber text-lg md:text-xl font-bold tracking-[0.24em] uppercase group-hover:text-white transition-colors duration-300 leading-none"
-        />
+        <span className="font-3d-cyber text-lg md:text-xl font-bold tracking-[0.24em] uppercase text-white group-hover:text-white transition-colors duration-300 leading-none">
+          NAKSHATRA
+        </span>
         <span className="font-3d-cyber text-lg md:text-xl font-bold tracking-[0.24em] text-cyber-liquid-red ml-0.5 group-hover:brightness-125 transition-all duration-300 leading-none inline-block">
           -X
         </span>

@@ -20,7 +20,6 @@ import SmartOreBlendingModal from './SmartOreBlendingModal'
 import MineTwinPanel from '@/components/mine-twin/MineTwinPanel'
 import SpaceDustParticles from './SpaceDustParticles'
 import AICopilotModal from './AICopilotModal'
-import { HyperText } from '@/components/ui/hyper-text'
 import {
   Satellite,
   ShieldCheck,
@@ -148,14 +147,12 @@ export default function MissionControlDashboard() {
               </span>
             </div>
 
-            {/* Pure Text with Glowing Space Font, Dual Red-Green Liquid Glass -X & Gentle Breathing */}
+            {/* Pure Text with Glowing Space Font, Dual Red-Green Liquid Glass -X */}
             <div className="flex items-center justify-center gap-x-1 select-none my-3 bg-transparent">
-              <HyperText
-                text="NAKSHATRA"
-                duration={700}
-                className="font-3d-cyber animate-text-breath text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-[0.28em] uppercase font-space"
-              />
-              <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-[0.28em] text-cyber-liquid-red animate-text-breath ml-1 font-space">
+              <span className="font-3d-cyber text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-[0.28em] uppercase font-space text-white">
+                NAKSHATRA
+              </span>
+              <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-[0.28em] text-cyber-liquid-red ml-1 font-space">
                 -X
               </span>
             </div>
