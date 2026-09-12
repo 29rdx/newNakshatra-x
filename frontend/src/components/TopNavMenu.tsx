@@ -74,6 +74,14 @@ const NAV_ITEMS: NavItem[] = [
     icon: ShieldAlert,
     targetId: 'risk-cockpit',
   },
+  {
+    id: 'history',
+    label: '50-Yr History & Forecast',
+    icon: History,
+    targetId: 'historical-forecast',
+    badge: '1977-2040',
+    isModalTrigger: true,
+  },
 ]
 
 

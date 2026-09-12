@@ -21,7 +21,6 @@ import ProductionSentinel from './ProductionSentinel'
 import RiskCockpit from './RiskCockpit'
 import ActionCenter from './ActionCenter'
 import SmartOreBlendingModal from './SmartOreBlendingModal'
-import HistoricalForecastModal from './HistoricalForecastModal'
 import MineTwinPanel from '@/components/mine-twin/MineTwinPanel'
 import SpaceDustParticles from './SpaceDustParticles'
 import AICopilotModal from './AICopilotModal'
@@ -43,6 +42,7 @@ import {
   Scale,
   Compass,
   Lock,
+  History,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -194,7 +194,15 @@ export default function MissionControlDashboard() {
                 <span>SYNC</span>
               </button>
               <div className="h-4 w-px bg-white/20" />
-              <HistoricalForecastModal />
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent('open-historical-forecast-modal'))}
+                className="ios-glass-button px-3.5 py-1.5 rounded-full text-xs font-mono font-bold flex items-center gap-2 cursor-pointer text-[#38BDF8] border border-[#38BDF8]/40 hover:border-[#00FF88] hover:text-[#00FF88] shadow-[0_0_12px_rgba(56,189,248,0.2)] hover:shadow-[0_0_16px_rgba(0,255,136,0.3)] transition-all"
+                title="Open 50-Year Historical Database & 2040 Forecast Panel"
+                type="button"
+              >
+                <History className="w-3.5 h-3.5 text-[#38BDF8]" />
+                <span>50-Yr History & 2040 Predictions</span>
+              </button>
             </div>
           </div>
         </div>

@@ -8,6 +8,16 @@ const AICopilotModal = dynamic(
   { ssr: false }
 )
 
+const HistoricalForecastModal = dynamic(
+  () => import('@/components/mission-control/HistoricalForecastModal'),
+  { ssr: false }
+)
+
 export default function GlobalCopilotWrapper() {
-  return <AICopilotModal />
+  return (
+    <>
+      <AICopilotModal />
+      <HistoricalForecastModal />
+    </>
+  )
 }
