@@ -74,12 +74,6 @@ const NAV_ITEMS: NavItem[] = [
     icon: ShieldAlert,
     targetId: 'risk-cockpit',
   },
-  {
-    id: 'compliance',
-    label: 'Audit & ESG',
-    icon: FileCheck,
-    targetId: 'compliance-reports',
-  },
 ]
 
 

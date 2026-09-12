@@ -20,16 +20,9 @@ import ReserveIntelligence from './ReserveIntelligence'
 import ProductionSentinel from './ProductionSentinel'
 import RiskCockpit from './RiskCockpit'
 import ActionCenter from './ActionCenter'
-
-import AuditAndUploadModal from './AuditAndUploadModal'
 import SmartOreBlendingModal from './SmartOreBlendingModal'
-
-import BoreholeAssayModeler from './BoreholeAssayModeler'
 import HistoricalForecastModal from './HistoricalForecastModal'
 import MineTwinPanel from '@/components/mine-twin/MineTwinPanel'
-import IncidentAlertCenter from './IncidentAlertCenter'
-
-import ComplianceReportModal from './ComplianceReportModal'
 import SpaceDustParticles from './SpaceDustParticles'
 import AICopilotModal from './AICopilotModal'
 import { HyperText } from '@/components/ui/hyper-text'
@@ -308,70 +301,50 @@ export default function MissionControlDashboard() {
         </div>
 
         {/* ============================================================
-            STAGE 3: ADVANCED REAL OPERATIONAL OPTIMIZATION & 3D KRIGING
+            STAGE 2: ADVANCED REAL OPERATIONAL OPTIMIZATION
             ============================================================ */}
         <div id="smart-blending" className="space-y-4 scroll-mt-24">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-[#FACC15]" />
             <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#FACC15]">
-              STAGE 02 &bull; ADVANCED SIMPLEX ORE BLENDING & 3D BOREHOLE ESTIMATION
+              STAGE 02 &bull; ADVANCED SIMPLEX ORE BLENDING OPTIMIZATION
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8">
             <SmartOreBlendingModal mine={selectedMine} />
-            <BoreholeAssayModeler mine={selectedMine} />
           </div>
         </div>
 
         {/* ============================================================
-            STAGE 4: OPERATIONAL RISK COCKPIT & INCIDENT AUTOMATION
+            STAGE 3: OPERATIONAL RISK COCKPIT & METEOROLOGICAL MONITORING
             ============================================================ */}
         <div id="risk-cockpit" className="space-y-4 scroll-mt-24">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-[#FB923C]" />
             <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#FB923C]">
-              STAGE 03 &bull; METEOROLOGICAL CONSTRAINT COCKPIT & INCIDENT DISPATCH
+              STAGE 03 &bull; METEOROLOGICAL CONSTRAINT &amp; FLOOD WARNING COCKPIT
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 gap-8">
             <RiskCockpit mine={selectedMine} weather={weather} risk={risk} />
-            <IncidentAlertCenter mine={selectedMine} />
           </div>
         </div>
 
         {/* ============================================================
-            STAGE 5: PRESCRIPTIVE DIRECTIVES
+            STAGE 4: PRESCRIPTIVE DIRECTIVES
             ============================================================ */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-[#38BDF8]" />
             <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#38BDF8]">
-              STAGE 05 &bull; PRESCRIPTIVE MITIGATION
+              STAGE 04 &bull; PRESCRIPTIVE MITIGATION DIRECTIVES
             </h3>
           </div>
 
           <div className="grid grid-cols-1 gap-8">
             <ActionCenter mine={selectedMine} actions={actions} />
-          </div>
-        </div>
-
-
-        {/* ============================================================
-            STAGE 6: STAC DATA LINEAGE & EXECUTIVE COMPLIANCE DOSSIER
-            ============================================================ */}
-        <div id="compliance-reports" className="space-y-4 scroll-mt-24">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#00FF88]" />
-            <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#00FF88]">
-              STAGE 05 &bull; COPERNICUS STAC PROVENANCE & MINISTRY AUDIT DOSSIER
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <AuditAndUploadModal mine={selectedMine} audit={audit} stacScenes={stacScenes} />
-            <ComplianceReportModal mine={selectedMine} />
           </div>
         </div>
 
