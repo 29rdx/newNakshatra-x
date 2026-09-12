@@ -56,15 +56,15 @@ export default function ActionCenter({ mine, actions: initialActions }: Props) {
   const totalRecovery = actions.reduce((sum, a) => sum + (a.estimated_recovery_tonnes || 0), 0)
 
   return (
-    <div className="ios-glass-card p-6 flex flex-col justify-between gap-6">
+    <div className="ios-glass-card p-4 flex flex-col justify-between gap-3">
       {/* Header */}
       <div>
-        <div className="flex items-center justify-between gap-4 mb-2">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between gap-2 mb-1.5">
+          <div className="flex items-center gap-1.5">
             <span className="ios-badge ios-badge-gold">
               AI/ML MODULE 04
             </span>
-            <span className="text-xs font-mono text-[#8FA4B5]">Optimization & Prescriptive Solver</span>
+            <span className="text-[10px] font-mono text-[#8FA4B5]">Optimization & Prescriptive Solver</span>
           </div>
           <span className="ios-badge ios-badge-live">
             <Zap className="w-3 h-3" />
@@ -72,36 +72,36 @@ export default function ActionCenter({ mine, actions: initialActions }: Props) {
           </span>
         </div>
 
-        <h3 className="text-2xl font-bold text-[#E8F0F2] tracking-tight">
+        <h3 className="text-lg font-bold text-[#E8F0F2] tracking-tight">
           Prescriptive Action Center
         </h3>
-        <p className="text-xs text-[#8FA4B5] mt-1 leading-relaxed">
+        <p className="text-[11px] text-[#8FA4B5] mt-0.5 leading-snug">
           Targeted operational interventions prioritized by recoverable tonnage and shortfall impact at {mine.name}.
         </p>
       </div>
 
       {/* Recoverable Tonnage Banner */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-[#00FF88]/15 via-[#E5C76B]/10 to-transparent border border-[#00FF88]/30 backdrop-blur-xl flex items-center justify-between">
+      <div className="p-2.5 rounded-xl bg-gradient-to-r from-[#00FF88]/15 via-[#E5C76B]/10 to-transparent border border-[#00FF88]/30 backdrop-blur-xl flex items-center justify-between">
         <div>
-          <div className="text-[10px] font-mono uppercase text-[#8FA4B5] tracking-wider">
+          <div className="text-[9px] font-mono uppercase text-[#8FA4B5] tracking-wider mb-0.5">
             Total Recoverable Capacity
           </div>
-          <div className="text-2xl font-mono font-extrabold text-[#00FF88]">
-            +{totalRecovery.toLocaleString('en-IN')} <span className="text-sm font-normal text-[#E8F0F2]">T / 14-Day Cycle</span>
+          <div className="text-lg font-mono font-extrabold text-[#00FF88] leading-none">
+            +{totalRecovery.toLocaleString('en-IN')} <span className="text-xs font-normal text-[#E8F0F2]">T / 14-Day Cycle</span>
           </div>
         </div>
         <div className="text-right">
-          <div className="text-xs font-mono font-bold text-[#E5C76B]">
+          <div className="text-[11px] font-mono font-bold text-[#E5C76B] mb-0.5">
             {Object.keys(dispatchedIds).filter((k) => dispatchedIds[k]).length} of {actions.length} Executed
           </div>
-          <div className="text-[10px] font-mono text-[#8FA4B5]">
+          <div className="text-[9px] font-mono text-[#8FA4B5] leading-none">
             Reduces shortfall by {Math.min(92, Object.keys(dispatchedIds).filter((k) => dispatchedIds[k]).length * 32)}%
           </div>
         </div>
       </div>
 
       {/* Action Orders List */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         {actions.map((act) => {
           const isDispatched = dispatchedIds[act.id]
           const priorityBadgeClass =
@@ -114,42 +114,42 @@ export default function ActionCenter({ mine, actions: initialActions }: Props) {
           return (
             <div
               key={act.id}
-              className={`p-4 rounded-2xl border transition-all duration-300 ${
+              className={`p-3 rounded-xl border transition-all duration-300 ${
                 isDispatched
                   ? 'bg-[#00FF88]/10 border-[#00FF88]/40 shadow-[0_0_20px_rgba(0,255,136,0.15)]'
                   : 'bg-[rgba(6,10,14,0.7)] border-white/10 hover:border-white/20 hover:bg-white/5'
               }`}
             >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
-                <div className="flex items-center gap-2">
-                  <span className={`ios-badge ${priorityBadgeClass}`}>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1.5">
+                <div className="flex items-center gap-1.5">
+                  <span className={`ios-badge ${priorityBadgeClass} px-1.5 py-0.5 text-[8px]`}>
                     {act.priority}
                   </span>
-                  <span className="text-[10px] font-mono text-[#8FA4B5] uppercase">
+                  <span className="text-[9px] font-mono text-[#8FA4B5] uppercase">
                     [{act.type}]
                   </span>
                 </div>
 
-                <div className="text-xs font-mono font-bold text-[#00FF88]">
+                <div className="text-[11px] font-mono font-bold text-[#00FF88]">
                   +{act.estimated_recovery_tonnes} Tonnes Protected
                 </div>
               </div>
 
-              <h4 className="text-sm font-semibold text-[#E8F0F2] mb-1">{act.title}</h4>
-              <p className="text-xs text-[#8FA4B5] leading-relaxed mb-2">{act.reason}</p>
+              <h4 className="text-xs font-semibold text-[#E8F0F2] mb-0.5">{act.title}</h4>
+              <p className="text-[10px] text-[#8FA4B5] leading-snug mb-1.5">{act.reason}</p>
 
-              <div className="p-2.5 rounded-xl bg-black/40 border border-white/5 text-xs text-[#C66A3D] font-mono mb-3">
+              <div className="p-1.5 rounded-lg bg-black/40 border border-white/5 text-[10px] text-[#C66A3D] font-mono mb-2">
                 &bull; Impact: {act.impact}
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                <span className="text-[10px] font-mono text-[#8FA4B5]">
+              <div className="flex items-center justify-between pt-1.5 border-t border-white/5">
+                <span className="text-[9px] font-mono text-[#8FA4B5]">
                   Status: {isDispatched ? 'DISPATCHED TO PIT SUPERVISOR' : 'AWAITING APPROVAL'}
                 </span>
 
                 <button
                   onClick={() => toggleDispatch(act.id)}
-                  className={`ios-glass-button px-4 py-1.5 rounded-full text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer ${
+                  className={`ios-glass-button px-3 py-1 rounded-lg text-[10px] font-mono font-bold flex items-center gap-1 cursor-pointer ${
                     isDispatched
                       ? 'bg-[#00FF88]/25 text-[#00FF88] border-[#00FF88]/60 shadow-[0_0_15px_rgba(0,255,136,0.4)]'
                       : 'text-[#E8F0F2]'
@@ -157,12 +157,12 @@ export default function ActionCenter({ mine, actions: initialActions }: Props) {
                 >
                   {isDispatched ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-[#00FF88]" />
+                      <Check className="w-3 h-3 text-[#00FF88]" />
                       <span>Dispatched</span>
                     </>
                   ) : (
                     <>
-                      <Send className="w-3.5 h-3.5 text-[#C66A3D]" />
+                      <Send className="w-3 h-3 text-[#C66A3D]" />
                       <span>Approve & Dispatch</span>
                     </>
                   )}

@@ -4,6 +4,8 @@ import "./globals.css";
 import TopBanner from "@/components/TopBanner";
 import OfflineIndicator from "@/components/offline/OfflineIndicator";
 import PWARegistry from "@/components/offline/PWARegistry";
+import GlobalCopilotWrapper from "@/components/mission-control/GlobalCopilotWrapper";
+
 
 const inter = Inter({
   subsets: ["latin"],
@@ -50,9 +52,12 @@ export default function RootLayout({
         <PWARegistry />
         <TopBanner />
         {children}
+        <GlobalCopilotWrapper />
         <OfflineIndicator />
       </body>
     </html>
   );
 }
+
+
 

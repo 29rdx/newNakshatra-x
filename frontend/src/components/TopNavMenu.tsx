@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 import {
   Satellite,
   Cpu,
@@ -13,7 +14,9 @@ import {
   X,
   Box,
   History,
+  Mic,
 } from 'lucide-react'
+
 import { HyperText } from '@/components/ui/hyper-text'
 
 export interface NavItem {
@@ -79,32 +82,62 @@ const NAV_ITEMS: NavItem[] = [
   },
 ]
 
+
 export default function TopNavMenu() {
+  const router = useRouter()
+  const pathname = usePathname()
   const [activeTab, setActiveTab] = useState('surveillance')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // Real-time Scroll Spy: Step-by-Step active button glow as user scrolls through feature sections
+  // Smooth scroll helper
+  const scrollToTarget = (targetId: string) => {
+    const el = document.getElementById(targetId)
+    if (el) {
+      const yOffset = -90
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset
+      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+      return true
+    }
+    // Fallback if inside content container
+    const content = document.querySelector('.content-after-video')
+    if (content) {
+      const y = content.getBoundingClientRect().top + window.pageYOffset - 90
+      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+      return true
+    }
+    return false
+  }
+
+  // Handle hash scrolling on mount or navigation
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const hashId = window.location.hash.replace('#', '')
+      setTimeout(() => {
+        scrollToTarget(hashId)
+      }, 400)
+    }
+  }, [pathname])
+
+  // Real-time Scroll Spy on Home Page
+  useEffect(() => {
+    if (pathname !== '/') return
+
     const handleScroll = () => {
       const scrollPosition = window.scrollY
       const windowHeight = window.innerHeight
       const fullHeight = document.documentElement.scrollHeight
 
-      // Edge case: Top video / landing hero area
       if (scrollPosition < 300) {
         setActiveTab('surveillance')
         return
       }
 
-      // Edge case: Reached bottom of page
       if (windowHeight + scrollPosition >= fullHeight - 100) {
         setActiveTab('compliance')
         return
       }
 
-      // Reading checkpoint is 35% down the viewport
       const triggerPoint = scrollPosition + windowHeight * 0.35
-
       let currentActiveId = 'surveillance'
 
       for (const item of NAV_ITEMS) {
@@ -124,28 +157,33 @@ export default function TopNavMenu() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [pathname])
 
   const handleNavClick = (item: NavItem) => {
     setActiveTab(item.id)
     setMobileMenuOpen(false)
+
     if (item.isModalTrigger) {
-      const element = document.getElementById('mission-control') || document.querySelector('.content-after-video')
-      if (element && window.scrollY < 600) {
-        const yOffset = -100
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
-        window.scrollTo({ top: y, behavior: 'smooth' })
-      }
       window.dispatchEvent(new CustomEvent('open-historical-forecast-modal'))
       return
     }
-    const element = document.getElementById(item.targetId)
-    if (element) {
-      const yOffset = -100
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
-      window.scrollTo({ top: y, behavior: 'smooth' })
+
+    // Cross-page navigation: if user is not on home page, navigate to home with section hash
+    if (pathname !== '/') {
+      window.location.href = `/#${item.targetId}`
+      return
+    }
+
+    // If on home page, scroll directly
+    const scrolled = scrollToTarget(item.targetId)
+    if (!scrolled) {
+      // If dynamic component is still mounting, retry after brief delay
+      setTimeout(() => {
+        scrollToTarget(item.targetId)
+      }, 300)
     }
   }
+
 
 
   return (

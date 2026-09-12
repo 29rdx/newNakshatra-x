@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Starfield } from '@/components/nakshatra/sections'
 import { GlassCard } from '@/components/nakshatra/ui'
 import { LoginForm } from '@/components/auth/LoginForm'
+import { CyberRobotAvatar } from '@/components/auth/CyberRobotAvatar'
 import {
   ShieldCheck,
   Mail,
@@ -141,12 +142,19 @@ export default function PreviewPage() {
               &larr; Home
             </Link>
             <Link
+              href="/admin/login"
+              className="px-3 py-1.5 rounded-lg bg-[#38BDF8]/15 hover:bg-[#38BDF8]/25 border border-[#38BDF8]/50 text-[#38BDF8] font-bold transition-colors flex items-center gap-1"
+            >
+              <Lock size={11} /> Admin Users Store
+            </Link>
+            <Link
               href="/dashboard"
               className="px-3 py-1.5 rounded-lg bg-[#00FF88]/20 hover:bg-[#00FF88]/30 border border-[#00FF88]/50 text-[#00FF88] font-bold transition-colors flex items-center gap-1 shadow-[0_0_12px_rgba(0,255,136,0.2)]"
             >
               Launch Dashboard <ExternalLink size={12} />
             </Link>
           </div>
+
         </div>
 
         {/* Live Status Indicators Banner */}
@@ -281,12 +289,11 @@ export default function PreviewPage() {
                 </div>
               ) : currentUser ? (
                 <div className="space-y-4">
-                  {/* User Profile Card */}
+                  {/* User Profile Card with 3D Cyber Robot DP */}
                   <div className="p-4 rounded-xl bg-black/50 border border-[#00FF88]/30 flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-full border-2 border-[#00FF88] bg-[#0A1120] flex items-center justify-center text-[#00FF88] font-mono font-bold text-lg shadow-[0_0_15px_rgba(0,255,136,0.3)]">
-                      {currentUser.full_name?.charAt(0) || 'O'}
-                    </div>
+                    <CyberRobotAvatar size="md" className="h-12 w-12 shrink-0 border-2 border-[#00FF88] shadow-[0_0_15px_rgba(0,255,136,0.3)]" />
                     <div className="flex-1 min-w-0">
+
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-white text-sm truncate">
                           {currentUser.full_name}

@@ -49,21 +49,15 @@ export function UserNav() {
       <div className="flex items-center shrink-0">
         <Link
           href="/dashboard"
-          className="h-9 w-9 md:h-10 md:w-10 rounded-full bg-[#081022]/90 border border-[#38BDF8]/50 hover:border-[#00FF88] text-white flex items-center justify-center transition-all shadow-[0_0_12px_rgba(56,189,248,0.25)] hover:shadow-[0_0_16px_rgba(0,255,136,0.35)] shrink-0"
+          className="relative h-9 w-9 md:h-10 md:w-10 rounded-full flex items-center justify-center transition-all hover:scale-105 shrink-0"
           title={`Mission Control Operator: ${name}`}
         >
-          {avatarUrl && !avatarUrl.includes('default-user') ? (
-            <img
-              src={avatarUrl}
-              alt={name}
-              className="h-5 w-5 rounded-full border border-[#00FF88]"
-            />
-          ) : (
-            <CyberRobotAvatar size="sm" />
-          )}
+          <CyberRobotAvatar size="sm" className="h-9 w-9 md:h-10 md:w-10 border border-[#00FF88] shadow-[0_0_15px_rgba(0,255,136,0.4)]" />
         </Link>
       </div>
     )
+
+
   }
 
   return (

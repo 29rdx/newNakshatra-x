@@ -7,6 +7,9 @@ import { CyberRobotAvatar } from "@/components/auth/CyberRobotAvatar";
 import Link from "next/link";
 import { Shield, Key, Database, ArrowLeft, Cpu, Activity, Satellite } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
+
 export default async function DashboardPage() {
   const user = await getCurrentUser();
 
@@ -45,18 +48,12 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Commander Profile Card */}
           <GlassCard className="md:col-span-1 flex flex-col items-center text-center p-6 sm:p-8">
+            {/* 3D Cyber Robot Avatar */}
             <div className="relative mb-4 flex items-center justify-center">
-              {avatarUrl && !avatarUrl.includes("default-user") ? (
-                <img
-                  src={avatarUrl}
-                  alt={fullName}
-                  className="h-20 w-20 rounded-full border-2 border-[#00FF88] shadow-[0_0_20px_rgba(0,255,136,0.4)]"
-                />
-              ) : (
-                <CyberRobotAvatar size="lg" />
-              )}
-              <span className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-[#00FF88] border-2 border-black shadow-[0_0_8px_#00FF88]" />
+              <CyberRobotAvatar size="lg" className="h-24 w-24 border-2 border-[#00FF88] shadow-[0_0_30px_rgba(0,255,136,0.5)]" />
             </div>
+
+
 
             <h2 className="text-xl font-bold text-white">{fullName}</h2>
             <p className="text-xs font-mono text-slate-400 mt-0.5">{user.email}</p>

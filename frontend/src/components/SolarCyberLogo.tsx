@@ -1,11 +1,12 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import { HyperText } from '@/components/ui/hyper-text'
 
 export default function SolarCyberLogo() {
   return (
-    <div className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer select-none">
+    <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer select-none">
       {/* 3D Animating Solar Type Logo in Cyber Blue + Cyber Red */}
       <div className="relative w-10 h-10 md:w-11 md:h-11 flex items-center justify-center perspective-800 transition-transform duration-300 ease-out group-hover:scale-105">
         {/* Outer Solar Corona Rays (Cyber Blue & Cyber Red Gradient) */}
@@ -74,6 +75,7 @@ export default function SolarCyberLogo() {
           -X
         </span>
       </div>
-    </div>
+    </Link>
   )
 }
+

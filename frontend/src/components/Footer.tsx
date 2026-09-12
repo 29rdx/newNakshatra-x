@@ -14,23 +14,28 @@ export default function Footer() {
         <div className="footer-links">
           <div className="footer-col">
             <h4>Product</h4>
-            <a href="#">Reserve Mapping</a>
-            <a href="#">Production Planning</a>
-            <a href="#">Documentation</a>
+            <Link href="/#reserve-intelligence">Reserve AI</Link>
+            <Link href="/#production-sentinel">Production Sentinel</Link>
+            <Link href="/#smart-blending">Ore Blending</Link>
+            <Link href="/#mine-twin">Mine Twin</Link>
           </div>
           <div className="footer-col">
-            <h4>Company</h4>
-            <a href="#">About</a>
-            <a href="#">Research</a>
-            <a href="#">Careers</a>
+            <h4>Platform</h4>
+            <Link href="/#mission-control">Orbital Feed</Link>
+            <Link href="/#judges-corner">ML Architecture</Link>
+            <Link href="/#risk-cockpit">Risk Cockpit</Link>
+            <Link href="/preview">Live Demo Console</Link>
           </div>
           <div className="footer-col">
-            <h4>Security</h4>
-            <Link href="/admin/login">Commander Access</Link>
+            <h4>Security &amp; ESG</h4>
+            <Link href="/login">Operator Login</Link>
+            <Link href="/dashboard">Mission Dashboard</Link>
+            <Link href="/admin/login">Commander Portal</Link>
             <Link href="/admin/setup">Claim Admin Slot</Link>
           </div>
         </div>
       </div>
+
 
       <div className="footer-bottom">
         <span>&copy; 2026 NAKSHATRA-X. All rights reserved.</span>

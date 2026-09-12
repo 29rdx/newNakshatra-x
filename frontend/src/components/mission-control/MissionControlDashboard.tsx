@@ -28,6 +28,7 @@ import BoreholeAssayModeler from './BoreholeAssayModeler'
 import HistoricalForecastModal from './HistoricalForecastModal'
 import MineTwinPanel from '@/components/mine-twin/MineTwinPanel'
 import IncidentAlertCenter from './IncidentAlertCenter'
+
 import ComplianceReportModal from './ComplianceReportModal'
 import SpaceDustParticles from './SpaceDustParticles'
 import AICopilotModal from './AICopilotModal'
@@ -347,7 +348,7 @@ export default function MissionControlDashboard() {
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-[#38BDF8]" />
             <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#38BDF8]">
-              STAGE 04 &bull; PRESCRIPTIVE MITIGATION
+              STAGE 05 &bull; PRESCRIPTIVE MITIGATION
             </h3>
           </div>
 
@@ -355,6 +356,7 @@ export default function MissionControlDashboard() {
             <ActionCenter mine={selectedMine} actions={actions} />
           </div>
         </div>
+
 
         {/* ============================================================
             STAGE 6: STAC DATA LINEAGE & EXECUTIVE COMPLIANCE DOSSIER

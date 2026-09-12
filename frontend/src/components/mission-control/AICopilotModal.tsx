@@ -35,9 +35,23 @@ interface Message {
 }
 
 interface Props {
-  mine: MineInfo
+  mine?: MineInfo
   onOpenBlending?: () => void
   onOpenBorehole?: () => void
+}
+
+
+const DEFAULT_MINE: MineInfo = {
+  id: 'balaghat',
+  numericId: 1,
+  name: 'Balaghat Mine',
+  code: 'BLG-01',
+  state: 'MP',
+  lat: 21.8045,
+  lng: 80.1852,
+  zone: 'Central Pit Alpha',
+  targetTonnes: 1200,
+  currentProduction: 1140,
 }
 
 const STARTER_QUESTIONS = [
@@ -49,7 +63,8 @@ const STARTER_QUESTIONS = [
   'Guide me through Mission Control!',
 ]
 
-export default function AICopilotModal({ mine }: Props) {
+export default function AICopilotModal({ mine = DEFAULT_MINE, onOpenBlending, onOpenBorehole }: Props) {
+
   const [isOpen, setIsOpen] = useState(false)
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)

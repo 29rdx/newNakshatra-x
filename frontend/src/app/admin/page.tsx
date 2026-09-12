@@ -29,6 +29,8 @@ import {
   Pickaxe,
 } from 'lucide-react'
 import { MineInfo } from '@/components/mission-control/types'
+import { CyberRobotAvatar } from '@/components/auth/CyberRobotAvatar'
+
 
 interface RegisteredUser {
   id: string
@@ -442,26 +444,21 @@ export default function AdminDashboard() {
 
                         return (
                           <tr key={u.id} className="hover:bg-white/5 transition-colors">
-                            {/* Operator Name & Avatar */}
+                            {/* Operator Name & 3D Robot DP */}
                             <td className="px-5 py-3.5">
                               <div className="flex items-center gap-3">
-                                {u.avatar_url ? (
-                                  <img
-                                    src={u.avatar_url}
-                                    alt={u.full_name}
-                                    className="h-8 w-8 rounded-full border border-[#00FF88]/40 object-cover"
-                                  />
-                                ) : (
-                                  <div className="h-8 w-8 rounded-full bg-[#0E1726] border border-[#38BDF8]/40 flex items-center justify-center text-[#38BDF8] text-xs font-bold">
-                                    {u.full_name?.charAt(0)?.toUpperCase() || '?'}
-                                  </div>
-                                )}
+                                <CyberRobotAvatar
+                                  size="sm"
+                                  className="h-8 w-8 shrink-0 border border-[#00FF88] shadow-[0_0_12px_rgba(0,255,136,0.35)]"
+                                />
                                 <div>
                                   <div className="font-bold text-white text-xs">{u.full_name || 'Anonymous User'}</div>
                                   <div className="text-[10px] text-slate-500">Active Operator</div>
                                 </div>
                               </div>
                             </td>
+
+
 
                             {/* Email */}
                             <td className="px-5 py-3.5 text-[#38BDF8] font-mono">

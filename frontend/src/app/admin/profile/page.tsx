@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Orbit, LogOut, Users, Shield, Mail, Calendar, ArrowLeft, RefreshCw } from 'lucide-react'
+import { CyberRobotAvatar } from '@/components/auth/CyberRobotAvatar'
+
 
 interface UserProfile {
   id: string
@@ -130,18 +132,12 @@ export default function AdminProfilePage() {
                   {users.map((user) => (
                     <tr key={user.id} className="hover:bg-white/5 transition-colors">
                       <td className="px-6 py-4">
-                        {user.avatar_url ? (
-                          <img
-                            src={user.avatar_url}
-                            alt={user.full_name}
-                            className="h-10 w-10 rounded-full border border-[#00FF88]/50"
-                          />
-                        ) : (
-                          <div className="h-10 w-10 rounded-full bg-[#081022] border border-[#38BDF8]/30 flex items-center justify-center text-[#38BDF8] text-xs font-bold">
-                            {user.full_name?.charAt(0)?.toUpperCase() || '?'}
-                          </div>
-                        )}
+                        <CyberRobotAvatar
+                          size="sm"
+                          className="h-9 w-9 shrink-0 border border-[#00FF88] shadow-[0_0_12px_rgba(0,255,136,0.35)]"
+                        />
                       </td>
+
                       <td className="px-6 py-4 text-white font-bold">{user.full_name || 'N/A'}</td>
                       <td className="px-6 py-4 text-[#38BDF8]">{user.email || 'N/A'}</td>
                       <td className="px-6 py-4">

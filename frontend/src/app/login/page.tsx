@@ -2,6 +2,8 @@ import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { Starfield } from "@/components/nakshatra/sections";
 
+export const dynamic = 'force-dynamic';
+
 export default function LoginPage() {
   return (
     <div className="relative isolate min-h-screen overflow-hidden bg-black text-white">
