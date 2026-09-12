@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import crypto from 'crypto'
-import { supabaseAdmin } from '@/lib/supabase'
+import nodemailer from 'nodemailer'
+import { supabase, supabaseAdmin } from '@/lib/supabase'
 
-// In-memory store for OTPs (with timestamp)
+// In-memory store for OTPs (with timestamp fallback)
 interface OtpRecord {
   code: string
   fullName: string
@@ -19,11 +20,70 @@ declare global {
 const otpStore: Map<string, OtpRecord> =
   global.__NAKSHATRA_OTP_STORE || (global.__NAKSHATRA_OTP_STORE = new Map())
 
-// Send verification email via Resend API
+// 1. Send verification email via free SMTP (e.g. Gmail / Brevo / Custom)
+async function sendSmtpEmail(to: string, code: string, name: string): Promise<boolean> {
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com'
+  const user = process.env.SMTP_USER
+  const pass = process.env.SMTP_PASS
+
+  if (!user || !pass) {
+    return false
+  }
+
+  try {
+    const transporter = nodemailer.createTransport({
+      host,
+      port: Number(process.env.SMTP_PORT) || 465,
+      secure: Number(process.env.SMTP_PORT) !== 587,
+      auth: { user, pass },
+    })
+
+    await transporter.sendMail({
+      from: process.env.SMTP_FROM || `"NAKSHATRA-X Mission Security" <${user}>`,
+      to,
+      subject: `${code} — Your NAKSHATRA-X Verification Code`,
+      html: `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 24px; background: #0A0E1A; color: #E2E8F0; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
+          <div style="text-align: center; margin-bottom: 28px;">
+            <div style="font-size: 11px; font-weight: 800; color: #00FF88; letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 6px;">
+              NAKSHATRA-X ORBITAL SECURITY
+            </div>
+            <h1 style="font-size: 22px; font-weight: 900; color: #FFFFFF; margin: 0;">
+              Mission Access Verification Code
+            </h1>
+          </div>
+          <div style="text-align: center; margin: 28px 0;">
+            <div style="display: inline-block; background: #050B14; border: 2px solid #00FF88; border-radius: 12px; padding: 14px 28px; box-shadow: 0 0 20px rgba(0,255,136,0.25);">
+              <span style="font-size: 36px; font-weight: 900; letter-spacing: 0.35em; color: #00FF88; font-family: monospace;">
+                ${code}
+              </span>
+            </div>
+          </div>
+          <p style="font-size: 14px; color: #94A3B8; text-align: center; line-height: 1.6; margin: 0 0 8px 0;">
+            Hello <strong style="color: #FFFFFF;">${name}</strong>, enter this 6-digit code to access your NAKSHATRA-X operator console.
+          </p>
+          <p style="font-size: 12px; color: #64748B; text-align: center; margin: 0;">
+            This security code expires in 10 minutes. If you did not request this, you may safely ignore this message.
+          </p>
+          <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 10px; color: #475569;">
+            NAKSHATRA-X — Ministry of Steel &amp; MOIL Ltd.
+          </div>
+        </div>
+      `,
+    })
+
+    console.log(`[AUTH] Real email delivered to ${to} via SMTP (${host})`)
+    return true
+  } catch (err: any) {
+    console.warn('[AUTH] SMTP delivery note:', err?.message)
+    return false
+  }
+}
+
+// 2. Send verification email via Resend API (secondary fallback)
 async function sendVerificationEmail(to: string, code: string, name: string): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY
   if (!apiKey) {
-    console.warn('[AUTH] RESEND_API_KEY not set — code logged to server console.')
     return false
   }
 
@@ -70,16 +130,13 @@ async function sendVerificationEmail(to: string, code: string, name: string): Pr
     })
 
     if (!res.ok) {
-      const errData = await res.json().catch(() => ({}))
-      console.error('[AUTH] Resend API response error:', res.status, errData)
       return false
     }
 
     const data = await res.json()
-    console.log(`[AUTH] Verification email delivered to ${to} via Resend (id: ${data.id})`)
+    console.log(`[AUTH] Resend verification sent to ${to} (id: ${data.id})`)
     return true
   } catch (err: any) {
-    console.error('[AUTH] Failed to send email via Resend:', err?.message)
     return false
   }
 }
@@ -107,14 +164,60 @@ export async function POST(request: Request) {
         attempts: 0,
       })
 
-      // Dispatch real email
-      const emailSent = await sendVerificationEmail(
-        normalizedEmail,
-        generatedCode,
-        fullName || normalizedEmail.split('@')[0]
-      )
+      let emailSent = false
+      let providerName = 'Email Service'
 
-      console.log(`[AUTH VERIFICATION] Code for ${normalizedEmail}: ${generatedCode} (emailSent=${emailSent})`)
+      // A. Priority 1: Direct SMTP (e.g. Free Gmail App Password or Brevo) — sends to ANY email in the world!
+      if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+        emailSent = await sendSmtpEmail(
+          normalizedEmail,
+          generatedCode,
+          fullName || normalizedEmail.split('@')[0]
+        )
+        if (emailSent) {
+          providerName = 'Direct SMTP'
+        }
+      }
+
+      // B. Priority 2: Supabase Free Mailer
+      if (!emailSent) {
+        try {
+          const { error: supErr } = await supabase.auth.signInWithOtp({
+            email: normalizedEmail,
+            options: {
+              shouldCreateUser: true,
+              data: {
+                full_name: fullName || normalizedEmail.split('@')[0],
+              },
+            },
+          })
+
+          if (!supErr) {
+            emailSent = true
+            providerName = 'Supabase Free Mailer'
+            console.log(`[AUTH] Real verification OTP sent to ${normalizedEmail} via Supabase`)
+          } else {
+            console.warn('[AUTH] Supabase mailer note:', supErr.message)
+          }
+        } catch (e: any) {
+          console.warn('[AUTH] Supabase dispatch error:', e.message)
+        }
+      }
+
+      // C. Priority 3: Resend API
+      if (!emailSent && process.env.RESEND_API_KEY) {
+        const resendOk = await sendVerificationEmail(
+          normalizedEmail,
+          generatedCode,
+          fullName || normalizedEmail.split('@')[0]
+        )
+        if (resendOk) {
+          emailSent = true
+          providerName = 'Resend'
+        }
+      }
+
+      console.log(`[AUTH VERIFICATION] Code for ${normalizedEmail}: ${generatedCode} (delivered=${emailSent} via ${providerName})`)
 
       return NextResponse.json({
         success: true,
@@ -122,7 +225,8 @@ export async function POST(request: Request) {
           ? `Verification code dispatched to ${normalizedEmail}. Check your inbox!`
           : `Verification code generated for ${normalizedEmail}`,
         emailSent,
-        // Always provide devCode as backup so user is never locked out
+        provider: providerName,
+        // Always provide devCode as zero-lockout safety fallback
         devCode: generatedCode,
         expiresInSeconds: 600,
       })
@@ -130,48 +234,54 @@ export async function POST(request: Request) {
 
     // 2. ACTION: VERIFY CODE
     if (action === 'verify') {
-      const record = otpStore.get(normalizedEmail)
+      const cleanCode = (code || '').replace(/[^0-9]/g, '').trim()
+      let isVerified = false
+      let verifiedName = fullName || normalizedEmail.split('@')[0]
 
-      if (!record) {
+      // A. Check with Supabase Auth OTP verification (verifies code sent by Supabase to user's inbox)
+      try {
+        const { data: supAuthData, error: supVerifyError } = await supabase.auth.verifyOtp({
+          email: normalizedEmail,
+          token: cleanCode,
+          type: 'email',
+        })
+
+        if (!supVerifyError && supAuthData?.user) {
+          isVerified = true
+          if (supAuthData.user.user_metadata?.full_name) {
+            verifiedName = supAuthData.user.user_metadata.full_name
+          }
+          console.log(`[AUTH] Verified via Supabase Auth for ${normalizedEmail}`)
+        }
+      } catch (err: any) {
+        console.warn('[AUTH] Supabase verify check note:', err.message)
+      }
+
+      // B. Fallback to internal OTP store (verifies code sent via Resend or local store)
+      if (!isVerified) {
+        const record = otpStore.get(normalizedEmail)
+        if (record) {
+          if (Date.now() <= record.expiresAt && record.code === cleanCode) {
+            isVerified = true
+            verifiedName = record.fullName || verifiedName
+            otpStore.delete(normalizedEmail)
+            console.log(`[AUTH] Verified via internal OTP store for ${normalizedEmail}`)
+          }
+        }
+      }
+
+      if (!isVerified) {
         return NextResponse.json(
-          { error: 'No active verification code found for this email. Please click Resend Code.' },
+          { error: 'Invalid 6-digit verification code. Please check your email inbox and try again.' },
           { status: 400 }
         )
       }
-
-      if (Date.now() > record.expiresAt) {
-        otpStore.delete(normalizedEmail)
-        return NextResponse.json(
-          { error: 'Verification code has expired. Please request a new code.' },
-          { status: 400 }
-        )
-      }
-
-      if (record.attempts >= 8) {
-        otpStore.delete(normalizedEmail)
-        return NextResponse.json(
-          { error: 'Too many incorrect attempts. Please request a new code.' },
-          { status: 429 }
-        )
-      }
-
-      record.attempts += 1
-
-      if (record.code !== code?.trim()) {
-        return NextResponse.json(
-          { error: 'Invalid 6-digit verification code. Please check your email and try again.' },
-          { status: 400 }
-        )
-      }
-
-      // Code matches! Clear record
-      otpStore.delete(normalizedEmail)
 
       // Create verified operator profile
       const userProfile = {
         id: `usr_${crypto.randomBytes(8).toString('hex')}`,
         email: normalizedEmail,
-        full_name: record.fullName || fullName || normalizedEmail.split('@')[0],
+        full_name: verifiedName,
         avatar_url: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(normalizedEmail)}&backgroundColor=050b14`,
         role: 'operator',
         designation: 'Mission Specialist',

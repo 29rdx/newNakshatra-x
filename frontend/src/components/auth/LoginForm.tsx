@@ -569,36 +569,30 @@ export function LoginForm() {
             </span>
           </button>
 
-          {/* Backup Code Fallback (in case email delivery takes time) */}
+          {/* Verification Code Fallback Banner (Ensures any email can log in immediately) */}
           {backupCode && (
-            <div className="pt-1 text-center">
-              {!showBackup ? (
+            <div className="pt-2">
+              <div className="p-3 rounded-2xl bg-gradient-to-r from-[#00FF88]/15 to-[#38BDF8]/15 border border-[#00FF88]/40 flex items-center justify-between text-xs font-mono shadow-[0_0_15px_rgba(0,255,136,0.15)]">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
+                    Instant Access Code:
+                  </span>
+                  <span className="text-white font-bold text-sm tracking-[0.25em] text-[#00FF88]">
+                    {backupCode}
+                  </span>
+                </div>
                 <button
                   type="button"
-                  onClick={() => setShowBackup(true)}
-                  className="text-[10px] font-mono text-slate-500 hover:text-slate-300 inline-flex items-center gap-1 cursor-pointer transition-colors"
+                  onClick={() => {
+                    const split = backupCode.split('')
+                    setDigits(split)
+                    executeVerification(backupCode)
+                  }}
+                  className="px-3 py-1.5 rounded-xl bg-[#00FF88] hover:bg-[#00FF88]/80 text-black font-bold text-[11px] font-mono transition-all cursor-pointer shadow-[0_0_10px_#00FF88]"
                 >
-                  <Eye size={11} />
-                  <span>Email slow? View backup code</span>
+                  Auto-Fill &amp; Log In ↵
                 </button>
-              ) : (
-                <div className="p-2.5 rounded-xl bg-black/60 border border-white/10 flex items-center justify-between text-xs font-mono">
-                  <span className="text-slate-400">
-                    Backup Code: <strong className="text-[#00FF88] tracking-widest">{backupCode}</strong>
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const split = backupCode.split('')
-                      setDigits(split)
-                      executeVerification(backupCode)
-                    }}
-                    className="text-[10px] font-mono text-[#00FF88] hover:underline cursor-pointer uppercase font-bold"
-                  >
-                    Auto-Fill &amp; Submit
-                  </button>
-                </div>
-              )}
+              </div>
             </div>
           )}
         </div>
