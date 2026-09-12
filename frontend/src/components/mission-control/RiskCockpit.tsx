@@ -28,7 +28,7 @@ export default function RiskCockpit({ mine, weather, risk }: Props) {
   }))
 
   return (
-    <div className="ios-glass-card p-6 flex flex-col justify-between gap-6">
+    <div className="ios-glass-card p-6 flex flex-col justify-between gap-6 h-full">
       {/* Header */}
       <div>
         <div className="flex items-center justify-between gap-4 mb-2">

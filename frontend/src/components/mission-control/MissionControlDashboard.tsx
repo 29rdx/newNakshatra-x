@@ -301,34 +301,23 @@ export default function MissionControlDashboard() {
         </div>
 
         {/* ============================================================
-            STAGE 2: ADVANCED REAL OPERATIONAL OPTIMIZATION
+            STAGE 2: SIMPLEX ORE BLENDING & OPERATIONAL RISK COCKPIT (SIDE BY SIDE)
             ============================================================ */}
         <div id="smart-blending" className="space-y-4 scroll-mt-24">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-[#FACC15]" />
             <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#FACC15]">
-              STAGE 02 &bull; ADVANCED SIMPLEX ORE BLENDING OPTIMIZATION
+              STAGE 02 &bull; ORE BLENDING OPTIMIZER &amp; OPERATIONAL RISK COCKPIT
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 gap-8">
-            <SmartOreBlendingModal mine={selectedMine} />
-          </div>
-        </div>
-
-        {/* ============================================================
-            STAGE 3: OPERATIONAL RISK COCKPIT & METEOROLOGICAL MONITORING
-            ============================================================ */}
-        <div id="risk-cockpit" className="space-y-4 scroll-mt-24">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#FB923C]" />
-            <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#FB923C]">
-              STAGE 03 &bull; METEOROLOGICAL CONSTRAINT &amp; FLOOD WARNING COCKPIT
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 gap-8">
-            <RiskCockpit mine={selectedMine} weather={weather} risk={risk} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            <div className="h-full">
+              <SmartOreBlendingModal mine={selectedMine} />
+            </div>
+            <div id="risk-cockpit" className="h-full scroll-mt-24">
+              <RiskCockpit mine={selectedMine} weather={weather} risk={risk} />
+            </div>
           </div>
         </div>
 
