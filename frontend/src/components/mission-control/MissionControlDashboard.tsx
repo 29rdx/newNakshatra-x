@@ -297,7 +297,7 @@ export default function MissionControlDashboard() {
           </div>
 
           <div>
-            <ProductionSentinel mine={selectedMine} forecast={forecast} risk={risk} />
+            <ProductionSentinel mine={selectedMine} forecast={forecast} risk={risk} weather={weather} />
           </div>
         </div>
 
