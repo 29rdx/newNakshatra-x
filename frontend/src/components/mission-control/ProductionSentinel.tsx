@@ -33,6 +33,7 @@ import {
   Layers,
   ArrowUpRight,
   Sparkles,
+  CloudRain,
 } from 'lucide-react'
 
 interface Props {
@@ -68,6 +69,10 @@ export default function ProductionSentinel({ mine, forecast, risk, weather }: Pr
   const [downtimeSlider, setDowntimeSlider] = useState<number>(12.5)
   const [gradeVariance, setGradeVariance] = useState<number>(0)
   const [chartView, setChartView] = useState<'daily' | 'cumulative'>('daily')
+
+  // SCADA Auto-Pumps & Early Flood Warning State
+  const [isScadaPumpActive, setIsScadaPumpActive] = useState<boolean>(true)
+  const [radarCloudburstAlert, setRadarCloudburstAlert] = useState<boolean>(false)
 
   // Update real rainfall slider when weather updates for the mine
   useEffect(() => {
@@ -525,6 +530,89 @@ export default function ProductionSentinel({ mine, forecast, risk, weather }: Pr
               </AreaChart>
             )}
           </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Early Flood Warning & Auto-Pumps Feature Card */}
+      <div className="p-5 rounded-2xl bg-gradient-to-br from-[#061224]/90 via-[#081830]/85 to-[#0B2040]/90 border border-[#00E5FF]/40 shadow-[0_0_30px_rgba(0,229,255,0.15)] space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="ios-badge !bg-[#00E5FF]/15 !text-[#00E5FF] !border-[#00E5FF]/40 !font-bold">
+              <CloudRain className="w-3.5 h-3.5 text-[#00E5FF] animate-pulse" />
+              ISRO RAIN RADAR &amp; SCADA AUTOMATION
+            </span>
+            <h4 className="text-base sm:text-lg font-bold font-space text-white flex items-center gap-2">
+              Early Flood Warning &amp; Auto-Pumps
+              {radarCloudburstAlert && (
+                <span className="px-2.5 py-0.5 rounded-full bg-[#FF2E63]/25 text-[#FF2E63] border border-[#FF2E63]/60 font-mono text-[10px] font-extrabold animate-pulse">
+                  30-MIN CLOUDBURST ALERT ACTIVE
+                </span>
+              )}
+            </h4>
+          </div>
+
+          <button
+            onClick={() => {
+              setRadarCloudburstAlert(true)
+              setIsScadaPumpActive(true)
+              setTimeout(() => setRadarCloudburstAlert(false), 12000)
+            }}
+            className="px-3 py-1.5 rounded-full bg-gradient-to-r from-[#00E5FF]/20 to-[#00FF88]/20 border border-[#00E5FF]/50 hover:border-[#00FF88] text-[#00E5FF] hover:text-[#00FF88] text-xs font-mono font-bold flex items-center gap-2 transition-all shadow-[0_0_14px_rgba(0,229,255,0.25)] cursor-pointer"
+            type="button"
+            title="Simulate 30-minute advance ISRO precipitation Doppler radar cloudburst detection"
+          >
+            <Zap size={13} className="animate-bounce text-[#00E5FF]" />
+            <span>Simulate 30-Min ISRO Radar Cloudburst</span>
+          </button>
+        </div>
+
+        {/* "In Simple Words" User Directive Box */}
+        <div className="p-4 rounded-xl bg-black/60 border-l-4 border-[#00E5FF] space-y-1.5 shadow-inner">
+          <span className="text-xs font-mono font-black text-[#00E5FF] uppercase tracking-wider flex items-center gap-1.5">
+            <Sparkles size={14} className="text-[#00E5FF]" />
+            In Simple Words:
+          </span>
+          <p className="text-xs sm:text-sm text-slate-100 font-sans leading-relaxed font-semibold italic">
+            &ldquo;Every monsoon, sudden cloudbursts drown mine roads and stop work for months. Our system reads ISRO rain radar 30 minutes before the storm hits and automatically turns on the water pumps through SCADA.&rdquo;
+          </p>
+        </div>
+
+        {/* Live SCADA Dewatering & Radar Telemetry Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+          <div className="p-3.5 rounded-xl bg-[#040C1A]/85 border border-white/10 space-y-1">
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="text-slate-400">ISRO Radar Lead Time:</span>
+              <span className="font-extrabold text-[#00FF88]">30 MIN PREDICTIVE</span>
+            </div>
+            <div className="text-sm font-bold text-white flex items-center gap-2 font-mono">
+              <Radio size={14} className="text-[#00FF88] animate-pulse" />
+              <span>MOSDAC Doppler Stream Synced</span>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-[#040C1A]/85 border border-white/10 space-y-1">
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="text-slate-400">SCADA Relay Dewatering:</span>
+              <span className={`font-extrabold ${isScadaPumpActive ? 'text-[#00FF88]' : 'text-slate-400'}`}>
+                {isScadaPumpActive ? 'AUTO-PUMPS ENGAGED' : 'STANDBY MODE'}
+              </span>
+            </div>
+            <div className="text-sm font-bold text-white flex items-center gap-2 font-mono">
+              <Zap size={14} className={isScadaPumpActive ? 'text-[#00FF88]' : 'text-slate-400'} />
+              <span>3 Sub-surface Pump Stations Active</span>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-[#040C1A]/85 border border-white/10 space-y-1">
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="text-slate-400">Haul Road Protection:</span>
+              <span className="font-extrabold text-[#38BDF8]">0% MONSOON DOWNTIME</span>
+            </div>
+            <div className="text-sm font-bold text-white flex items-center gap-2 font-mono">
+              <ShieldCheck size={14} className="text-[#38BDF8]" />
+              <span>Deep Pit Access Secured</span>
+            </div>
+          </div>
         </div>
       </div>
 
