@@ -2,3 +2,5 @@ node_modules
 .next
 .git
 public/frames
+.vercel/output/static/frames
+frames

@@ -1,11 +1,19 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://xtnfzngrhdtazisrvbci.supabase.co'
-const supabaseAnonKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_EJZOXmiFJaI553N9DzCGuw_wA5BdnsB'
-const supabaseServiceKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseUrl = (rawUrl.startsWith('http://') || rawUrl.startsWith('https://'))
+  ? rawUrl
+  : 'https://xtnfzngrhdtazisrvbci.supabase.co'
+
+const rawAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+const supabaseAnonKey = (rawAnonKey && rawAnonKey !== '[SENSITIVE]')
+  ? rawAnonKey
+  : 'sb_publishable_EJZOXmiFJaI553N9DzCGuw_wA5BdnsB'
+
+const rawServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+const supabaseServiceKey = (rawServiceKey && rawServiceKey !== '[SENSITIVE]')
+  ? rawServiceKey
+  : ''
 
 // Client-side Supabase client (anon key)
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
@@ -61,4 +69,3 @@ export async function signInWithSupabaseGoogle(redirectTo?: string) {
 
   return data
 }
-
