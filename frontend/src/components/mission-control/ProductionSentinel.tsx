@@ -55,6 +55,11 @@ export default function ProductionSentinel({ mine, forecast, risk, weather }: Pr
   // Real-time ticking clock (IST)
   const [currentTime, setCurrentTime] = useState<Date>(new Date())
   const [isLiveStreaming, setIsLiveStreaming] = useState<boolean>(true)
+  const [mounted, setMounted] = useState<boolean>(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Real-time dynamic operational metrics that change with time
   const [liveShiftExtracted, setLiveShiftExtracted] = useState<number>(() => Math.round(mine.targetTonnes * 0.018 * 10) / 10)
@@ -253,8 +258,8 @@ export default function ProductionSentinel({ mine, forecast, risk, weather }: Pr
             {/* Real-time IST Clock */}
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 border border-white/15 text-white font-mono text-xs shadow-inner">
               <Clock className="w-3.5 h-3.5 text-[#38BDF8]" />
-              <span className="font-bold text-[#38BDF8]">
-                {currentTime.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: false })} IST
+              <span className="font-bold text-[#38BDF8]" suppressHydrationWarning>
+                {mounted ? currentTime.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: false }) : '11:25:00'} IST
               </span>
             </div>
 

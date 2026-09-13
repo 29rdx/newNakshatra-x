@@ -451,7 +451,7 @@ export default function MissionControlDashboard() {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Radio className="w-3.5 h-3.5 text-[#00FF88] animate-pulse" />
-              Live Stream Sync: <span className="text-[#00FF88] font-bold">{lastSyncTime} IST</span>
+              Live Stream Sync: <span className="text-[#00FF88] font-bold" suppressHydrationWarning>{lastSyncTime} IST</span>
             </div>
             <Link
               href="/about"
