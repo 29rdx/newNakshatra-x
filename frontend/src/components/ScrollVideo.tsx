@@ -279,7 +279,7 @@ export default function ScrollVideo() {
               LIGHT TRANSLUCENT HIGH-VISIBILITY DUAL-COLOR OVERLAY OVER TRAIN VIDEO
               ============================================================ */}
           <div className="absolute inset-0 z-20 flex items-center justify-center p-3 sm:p-4 md:p-6 pointer-events-none select-none">
-            <div className="relative w-full max-w-4xl text-center bg-[#020617]/50 backdrop-blur-[2.5px] border border-[#FFB800]/20 rounded-2xl p-4 sm:p-6 shadow-[0_12px_40px_rgba(0,0,0,0.65)] pointer-events-none transition-all my-2">
+            <div className="relative w-full max-w-4xl text-center bg-[#030712]/15 backdrop-blur-[0.5px] border border-white/10 rounded-2xl p-4 sm:p-6 shadow-[0_12px_40px_rgba(0,0,0,0.4)] pointer-events-none transition-all my-2">
               {/* Top Telemetry Pills & Badges with Soft Contrast */}
               <div className="relative z-10 flex flex-wrap items-center justify-center gap-2 mb-4 pointer-events-none">
                 <span className="ios-badge ios-badge-live !font-bold !bg-[#060C1B]/75 !backdrop-blur-sm !border-[#00FF88]/40 !shadow-[0_0_10px_rgba(0,255,136,0.25)] text-[10px] sm:text-[11px]">
