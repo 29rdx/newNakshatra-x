@@ -182,38 +182,50 @@ export default function LocationFloodAlertFinder({ onSelectMine }: Props) {
         </div>
       </div>
 
-      {/* Interactive Location Search Input & Preset Pills */}
-      <div className="space-y-2.5">
+      {/* Interactive Location Search Input & Large Prominent Search Button */}
+      <div className="space-y-3">
         <form
           onSubmit={(e) => {
             e.preventDefault()
             handleSearch(searchQuery)
           }}
-          className="relative flex items-center gap-2"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
         >
           <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00E5FF]" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00E5FF]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Enter location e.g. Dongri, Balaghat, Chikla, Nagpur, Tirodi..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-[#040C1A]/90 border border-white/20 text-white placeholder-slate-400 text-xs font-mono focus:outline-none focus:border-[#00E5FF] shadow-inner transition-all"
+              placeholder="Type any location or mine name (e.g. Dongri, Balaghat, Chikla, Tirodi, Nagpur)..."
+              className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-[#040C1A]/95 border-2 border-[#00E5FF]/60 text-white placeholder-slate-400 text-xs sm:text-sm font-mono focus:outline-none focus:border-[#00FF88] shadow-[0_0_20px_rgba(0,229,255,0.2)] transition-all"
             />
           </div>
           <button
             type="submit"
             disabled={isLoading}
-            className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#00E5FF] to-[#00FF88] text-black font-mono text-xs font-extrabold uppercase tracking-wider flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_16px_rgba(0,229,255,0.4)] cursor-pointer shrink-0"
+            className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#00E5FF] via-[#00FF88] to-[#38BDF8] text-black font-mono text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2.5 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_24px_rgba(0,229,255,0.5)] cursor-pointer shrink-0 border border-white/40"
           >
-            {isLoading ? <Loader2 size={15} className="animate-spin" /> : <Search size={15} />}
-            <span>Find Flood Alert</span>
+            {isLoading ? (
+              <>
+                <Loader2 size={16} className="animate-spin text-black" />
+                <span>QUERYING SATELLITE...</span>
+              </>
+            ) : (
+              <>
+                <Search size={16} className="text-black" />
+                <span>SEARCH FLOOD ALERT &rarr;</span>
+              </>
+            )}
           </button>
         </form>
 
         {/* Preset Location Quick Chips */}
         <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
-          <span className="text-slate-400 text-[11px] font-bold">Quick Presets:</span>
+          <span className="text-slate-300 text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+            <MapPin size={13} className="text-[#00E5FF]" />
+            Click 1-Tap Mining Presets:
+          </span>
           {PRESET_LOCATIONS.map((loc) => (
             <button
               key={loc.name}
@@ -221,10 +233,11 @@ export default function LocationFloodAlertFinder({ onSelectMine }: Props) {
                 setSearchQuery(loc.name)
                 fetchRealFloodAlert(loc.lat, loc.lng, `${loc.name} Mining Sector (${loc.state})`)
               }}
-              className="px-3 py-1 rounded-full bg-white/10 hover:bg-[#00E5FF]/20 border border-white/15 hover:border-[#00E5FF]/50 text-slate-200 hover:text-[#00E5FF] text-[11px] transition-all cursor-pointer"
+              className="px-3.5 py-1.5 rounded-full bg-[#040C1A] hover:bg-[#00E5FF]/25 border border-white/20 hover:border-[#00E5FF] text-slate-200 hover:text-white text-xs font-bold transition-all cursor-pointer shadow-sm flex items-center gap-1"
               type="button"
             >
-              {loc.name} ({loc.state})
+              <span>{loc.name}</span>
+              <span className="text-[10px] text-[#00E5FF] font-mono">({loc.state})</span>
             </button>
           ))}
         </div>
