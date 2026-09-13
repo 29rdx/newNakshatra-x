@@ -448,7 +448,7 @@ export default function MissionControlDashboard() {
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-[#00FF88] animate-ping" />
               <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#00FF88]">
-                FEATURE 03 &bull; MINE TWIN SIMULATOR &bull; 50-YEAR HISTORY &amp; 2040 AI FORECAST
+                FEATURE 03 &bull; MINE TWIN &bull; 3D SIMULATOR &amp; REAL DATA ANALYTICS
               </h3>
             </div>
             <Link
