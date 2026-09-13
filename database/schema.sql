@@ -166,3 +166,63 @@ DROP TRIGGER IF EXISTS trg_db_users_updated_at ON public.db_users;
 CREATE TRIGGER trg_db_users_updated_at
   BEFORE UPDATE ON public.db_users
   FOR EACH ROW EXECUTE PROCEDURE public.set_updated_at();
+
+-- ==============================================================================
+-- 7. ISRO RADAR SYNCED EARLY FLOOD ALERT & AUTOMATED SCADA PUMP TABLES
+-- ==============================================================================
+
+DO $$ 
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'flood_risk_level') THEN
+    CREATE TYPE flood_risk_level AS ENUM ('NOMINAL', 'MODERATE', 'CRITICAL');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'scada_pump_status') THEN
+    CREATE TYPE scada_pump_status AS ENUM ('STANDBY', 'ENGAGED', 'OFFLINE', 'MAINTENANCE');
+  END IF;
+END $$;
+
+CREATE TABLE IF NOT EXISTS public.flood_alert_telemetry (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  location_name TEXT NOT NULL,
+  state_code VARCHAR(10) NOT NULL DEFAULT 'MH',
+  latitude NUMERIC(9,6) NOT NULL,
+  longitude NUMERIC(9,6) NOT NULL,
+  rainfall_14d_mm NUMERIC(8,2) NOT NULL DEFAULT 0.0,
+  soil_moisture_pct NUMERIC(5,2) NOT NULL DEFAULT 0.0,
+  land_surface_temp_c NUMERIC(5,2),
+  humidity_pct NUMERIC(5,2),
+  live_precipitation_rate_mm_hr NUMERIC(6,2) DEFAULT 0.0,
+  flood_risk_level flood_risk_level NOT NULL DEFAULT 'NOMINAL',
+  radar_lead_time_minutes INTEGER NOT NULL DEFAULT 30,
+  scada_pump_status scada_pump_status NOT NULL DEFAULT 'STANDBY',
+  telemetry_source TEXT DEFAULT 'LIVE Open-Meteo & ISRO MOSDAC Radar Stream',
+  recorded_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.scada_dewatering_pumps (
+  pump_id VARCHAR(64) PRIMARY KEY,
+  mine_code VARCHAR(32) NOT NULL,
+  mine_name TEXT NOT NULL,
+  shaft_level_m TEXT DEFAULT '-340m RL Sump',
+  discharge_capacity_m3h NUMERIC(8,2) DEFAULT 1270.0,
+  current_power_duty_pct NUMERIC(5,2) DEFAULT 0.0,
+  status scada_pump_status NOT NULL DEFAULT 'STANDBY',
+  auto_trigger_enabled BOOLEAN DEFAULT true,
+  last_cloudburst_trigger_at TIMESTAMP WITH TIME ZONE,
+  last_maintenance_at TIMESTAMP WITH TIME ZONE,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.cloudburst_predictive_vectors (
+  vector_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  telemetry_id UUID REFERENCES public.flood_alert_telemetry(id) ON DELETE CASCADE,
+  location_name TEXT NOT NULL,
+  lead_time_label VARCHAR(32) NOT NULL,
+  time_step_index INTEGER NOT NULL,
+  predicted_rain_intensity_mm_hr NUMERIC(6,2) NOT NULL,
+  recommended_scada_duty_pct NUMERIC(5,2) NOT NULL,
+  isro_radar_confidence_pct NUMERIC(5,2) DEFAULT 94.2,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
