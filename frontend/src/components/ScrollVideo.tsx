@@ -275,22 +275,25 @@ export default function ScrollVideo() {
             className="absolute inset-0 pointer-events-none w-full h-full object-cover opacity-85 z-15"
           />
 
+          {/* Darkened filter layer over the background scrolling video */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/80 via-[#020617]/60 to-[#020617]/85 pointer-events-none z-18" />
+
           {/* ============================================================
-              HIGH-CONTRAST DARK HERO OVERLAY WITH NEON GREEN & WHITE TYPOGRAPHY
+              HERO OVERLAY WITH WHITE & NEON GREEN TYPOGRAPHY (NO CARD BOX)
               ============================================================ */}
           <div className="absolute inset-0 z-20 flex items-center justify-center p-3 sm:p-5 md:p-8 pointer-events-none select-none">
-            <div className="relative w-full max-w-3xl text-center bg-[#020617]/75 backdrop-blur-sm border border-[#00FF88]/30 rounded-3xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.9)] shadow-[0_0_30px_rgba(0,255,136,0.18)] pointer-events-none my-auto">
+            <div className="relative w-full max-w-3xl text-center bg-transparent backdrop-blur-none border-none shadow-none pointer-events-none my-auto">
               
               {/* Top Telemetry Badges */}
               <div className="relative z-10 flex flex-wrap items-center justify-center gap-2 mb-4 pointer-events-none">
-                <span className="ios-badge ios-badge-live !font-bold !bg-[#060C1B]/90 !border-[#00FF88]/50 !shadow-[0_0_14px_rgba(0,255,136,0.35)] text-[10px] sm:text-[11px]">
+                <span className="ios-badge ios-badge-live !font-bold !bg-[#060C1B]/80 !border-[#00FF88]/50 !shadow-[0_0_14px_rgba(0,255,136,0.35)] text-[10px] sm:text-[11px]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#00FF88] shadow-[0_0_6px_#00FF88]" />
                   <span className="text-[#00FF88]">LIVE SATELLITE TELEMETRY ACTIVE</span>
                 </span>
-                <span className="ios-badge !bg-[#060C1B]/90 !text-[#FFB800] !border-[#FFB800]/40 !font-bold text-[10px] sm:text-[11px]">
+                <span className="ios-badge !bg-[#060C1B]/80 !text-[#FFB800] !border-[#FFB800]/40 !font-bold text-[10px] sm:text-[11px]">
                   SIH 2026 &bull; PROBLEM ID 26009
                 </span>
-                <span className="ios-badge !bg-[#060C1B]/90 !text-[#FF2E63] !border-[#FF2E63]/40 !font-bold text-[10px] sm:text-[11px]">
+                <span className="ios-badge !bg-[#060C1B]/80 !text-[#FF2E63] !border-[#FF2E63]/40 !font-bold text-[10px] sm:text-[11px]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#FF2E63]" />
                   ISRO MOSDAC / BHUVAN ACTIVE
                 </span>
@@ -312,7 +315,7 @@ export default function ScrollVideo() {
               </p>
 
               {/* Live Telemetry Capsule Bar */}
-              <div className="relative z-10 mt-4.5 inline-flex flex-wrap items-center justify-center gap-3 px-5 py-2 rounded-full bg-[#060C1B]/90 border border-[#00FF88]/30 shadow-[0_0_16px_rgba(0,255,136,0.2)] pointer-events-none">
+              <div className="relative z-10 mt-4.5 inline-flex flex-wrap items-center justify-center gap-3 px-5 py-2 rounded-full bg-[#060C1B]/80 border border-[#00FF88]/30 shadow-[0_0_16px_rgba(0,255,136,0.2)] pointer-events-none">
                 <div className="flex items-center gap-1.5 font-mono text-[10px] text-[#38BDF8] uppercase font-bold tracking-wider">
                   <Radio className="w-3 h-3 text-[#FF2E63]" />
                   <span>LIVE TELEMETRY STREAM</span>
