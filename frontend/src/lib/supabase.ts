@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl =
   process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://xtnfzngrhdtazisrvbci.supabase.co'
 const supabaseAnonKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_EJZOXmiFJaI553N9DzCGuw_wA5BdnsB'
 const supabaseServiceKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 
@@ -11,12 +11,15 @@ const supabaseServiceKey =
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Server-side Admin Supabase client (service role key, bypasses RLS)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-  },
-})
+// Safely created only when service role key is present; falls back to standard client on browser side to prevent runtime crash
+export const supabaseAdmin = supabaseServiceKey
+  ? createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    })
+  : supabase
 
 export interface SupabaseProfile {
   id: string

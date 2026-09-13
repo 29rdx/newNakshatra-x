@@ -58,7 +58,7 @@ export function askNakshatra(query: string): ChatResult {
     .filter((r) => r.score > 0)
     .sort((a, b) => b.score - a.score)
 
-  if (ranked.length === 0) {
+  if (ranked.length === 0 || ranked[0].score < 0.5) {
     return {
       matched: false,
       suggestions: knowledgeBase.slice(0, 3),

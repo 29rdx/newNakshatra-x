@@ -2,257 +2,204 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import Link from 'next/link'
 import {
   Satellite,
   Cpu,
   Activity,
   Layers,
   ShieldAlert,
-  FileCheck,
   Menu,
   X,
   Box,
-  Mic,
+  Home,
+  Sparkles,
+  Info,
 } from 'lucide-react'
 
 export interface NavItem {
   id: string
   label: string
-  icon: React.ComponentType<{ size?: number; className?: string }>
-  targetId: string
+  shortLabel?: string
+  icon: React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>
+  href: string
   badge?: string
-  isModalTrigger?: boolean
+  color?: string
 }
 
-// Strict Step-by-Step Top-to-Bottom Sequential Navigation Flow
 const NAV_ITEMS: NavItem[] = [
   {
-    id: 'surveillance',
-    label: 'Orbital Feed',
-    icon: Satellite,
-    targetId: 'mission-control',
-    badge: 'LIVE',
+    id: 'mission-control',
+    label: 'Mission Control',
+    shortLabel: 'Mission',
+    icon: Home,
+    href: '/',
+    color: '#00FF88',
   },
   {
     id: 'evaluator',
-    label: 'ML Architecture',
+    label: 'ML Studio',
+    shortLabel: 'ML Studio',
     icon: Cpu,
-    targetId: 'judges-corner',
+    href: '/evaluator',
+    color: '#FB923C',
   },
   {
-    id: 'minetwin',
+    id: 'mine-twin',
     label: 'Mine Twin',
+    shortLabel: 'Mine Twin',
     icon: Box,
-    targetId: 'mine-twin',
-    badge: 'TWIN',
+    href: '/mine-twin',
+    color: '#00FF88',
   },
   {
     id: 'production',
     label: 'Production',
+    shortLabel: 'Production',
     icon: Activity,
-    targetId: 'production-sentinel',
+    href: '/production',
+    color: '#38BDF8',
   },
   {
     id: 'blending',
     label: 'Ore Blending',
+    shortLabel: 'Blending',
     icon: Layers,
-    targetId: 'smart-blending',
+    href: '/blending',
+    color: '#FACC15',
   },
   {
-    id: 'risk',
-    label: 'Risk Cockpit',
-    icon: ShieldAlert,
-    targetId: 'risk-cockpit',
+    id: 'all-features',
+    label: 'All Features',
+    shortLabel: 'Features',
+    icon: Sparkles,
+    href: '/features',
+    color: '#38BDF8',
+  },
+  {
+    id: 'about',
+    label: 'About',
+    shortLabel: 'About',
+    icon: Info,
+    href: '/about',
+    color: '#FF2E63',
   },
 ]
-
 
 export default function TopNavMenu() {
   const router = useRouter()
   const pathname = usePathname()
-  const [activeTab, setActiveTab] = useState('surveillance')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // Smooth scroll helper
-  const scrollToTarget = (targetId: string) => {
-    const el = document.getElementById(targetId)
-    if (el) {
-      const yOffset = -90
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset
-      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
-      return true
-    }
-    // Fallback if inside content container
-    const content = document.querySelector('.content-after-video')
-    if (content) {
-      const y = content.getBoundingClientRect().top + window.pageYOffset - 90
-      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
-      return true
-    }
-    return false
+  const getActiveTab = () => {
+    if (pathname === '/') return 'mission-control'
+    if (pathname.startsWith('/evaluator')) return 'evaluator'
+    if (pathname.startsWith('/mine-twin')) return 'mine-twin'
+    if (pathname.startsWith('/production')) return 'production'
+    if (pathname.startsWith('/blending')) return 'blending'
+    if (pathname.startsWith('/features')) return 'all-features'
+    if (pathname.startsWith('/about')) return 'about'
+    return 'mission-control'
   }
 
-  // Handle hash scrolling on mount or navigation
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash) {
-      const hashId = window.location.hash.replace('#', '')
-      setTimeout(() => {
-        scrollToTarget(hashId)
-      }, 400)
-    }
-  }, [pathname])
-
-  // Real-time Scroll Spy on Home Page
-  useEffect(() => {
-    if (pathname !== '/') return
-
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY
-      const windowHeight = window.innerHeight
-      const fullHeight = document.documentElement.scrollHeight
-
-      if (scrollPosition < 300) {
-        setActiveTab('surveillance')
-        return
-      }
-
-      if (windowHeight + scrollPosition >= fullHeight - 100) {
-        setActiveTab('compliance')
-        return
-      }
-
-      const triggerPoint = scrollPosition + windowHeight * 0.35
-      let currentActiveId = 'surveillance'
-
-      for (const item of NAV_ITEMS) {
-        if (item.isModalTrigger) continue
-        const el = document.getElementById(item.targetId)
-        if (el) {
-          const elementTop = el.getBoundingClientRect().top + scrollPosition
-          if (elementTop <= triggerPoint) {
-            currentActiveId = item.id
-          }
-        }
-      }
-
-      setActiveTab(currentActiveId)
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [pathname])
+  const activeTab = getActiveTab()
 
   const handleNavClick = (item: NavItem) => {
-    setActiveTab(item.id)
     setMobileMenuOpen(false)
-
-    if (item.isModalTrigger) {
-      window.dispatchEvent(new CustomEvent('open-historical-forecast-modal'))
-      return
-    }
-
-    // Cross-page navigation: if user is not on home page, navigate to home with section hash
-    if (pathname !== '/') {
-      window.location.href = `/#${item.targetId}`
-      return
-    }
-
-    // If on home page, scroll directly
-    const scrolled = scrollToTarget(item.targetId)
-    if (!scrolled) {
-      // If dynamic component is still mounting, retry after brief delay
-      setTimeout(() => {
-        scrollToTarget(item.targetId)
-      }, 300)
-    }
+    router.push(item.href)
   }
-
-
 
   return (
     <>
-      {/* Desktop / Tablet Clean Liquid Glass Navigation Capsule */}
-      <nav className="hidden lg:flex items-center gap-2 cyber-nav-pill px-3 py-1.5 shadow-xl max-w-full overflow-x-auto no-scrollbar">
-        {NAV_ITEMS.map((item) => {
+      {/* Desktop / Laptop Clean Liquid Glass Navigation Capsule */}
+      <nav className="hidden lg:flex items-center justify-center gap-1.5 lg:gap-2 cyber-nav-pill px-4 py-2 shadow-2xl max-w-full mx-auto flex-nowrap shrink-0 border border-[#38BDF8]/40 bg-[#060C1B]/90 backdrop-blur-2xl rounded-full shadow-[0_0_25px_rgba(6,12,27,0.8)]">
+        {NAV_ITEMS.map((item, idx) => {
           const Icon = item.icon
           const isActive = activeTab === item.id
+          const themeColor = item.color || '#38BDF8'
+          const isSeparatorBefore = idx === 5
 
           return (
-            <button
-              key={item.id}
-              onClick={() => handleNavClick(item)}
-              className={`cyber-nav-item ${isActive ? 'active' : ''} group shrink-0`}
-              type="button"
-            >
-              <Icon
-                size={15}
-                className={`transition-colors duration-200 shrink-0 ${
-                  isActive
-                    ? 'text-[#00FF88] drop-shadow-[0_0_8px_#00FF88]'
-                    : 'text-[#38BDF8] group-hover:text-white'
-                }`}
-              />
-              <span
-                className={`font-space text-[12px] xl:text-[13px] font-extrabold tracking-[0.07em] uppercase transition-colors duration-200 whitespace-nowrap ${
-                  isActive ? 'text-[#00FF88]' : 'text-slate-100 group-hover:text-white'
-                }`}
-              >
-                {item.label}
-              </span>
-              {item.badge && (
-                <span className="ml-1.5 px-2 py-0.5 rounded-full text-[9px] font-mono font-extrabold bg-[#00FF88]/20 text-[#00FF88] border border-[#00FF88]/40 shadow-[0_0_8px_rgba(0,255,136,0.3)] leading-none">
-                  {item.badge}
-                </span>
+            <React.Fragment key={item.id}>
+              {isSeparatorBefore && (
+                <div className="h-4 w-px bg-white/20 mx-1 shrink-0" aria-hidden="true" />
               )}
-            </button>
+              <button
+                onClick={() => handleNavClick(item)}
+                className={`px-3.5 lg:px-4 xl:px-4.5 py-2 rounded-full font-mono font-bold transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap shrink-0 border ${
+                  isActive
+                    ? 'bg-white/15 text-white shadow-lg'
+                    : 'bg-transparent text-slate-300 border-transparent hover:bg-white/10 hover:text-white'
+                }`}
+                style={
+                  isActive
+                    ? {
+                        borderColor: themeColor,
+                        boxShadow: `0 0 14px ${themeColor}50`,
+                      }
+                    : {}
+                }
+                type="button"
+              >
+                <Icon
+                  size={14}
+                  className="transition-colors duration-200 shrink-0"
+                  style={{ color: isActive ? themeColor : '#38BDF8' }}
+                />
+                <span className="font-space text-xs lg:text-[12.5px] xl:text-[13px] font-extrabold uppercase tracking-wider">
+                  {item.label}
+                </span>
+              </button>
+            </React.Fragment>
           )
         })}
       </nav>
 
-      {/* Mobile Hamburger Trigger */}
+      {/* Mobile / Small Tablet Hamburger Trigger */}
       <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className="lg:hidden p-2.5 rounded-xl bg-[#081022]/90 border border-[#38BDF8]/40 text-[#38BDF8] hover:text-[#00FF88] shadow-lg transition-colors"
+        className="lg:hidden p-2 rounded-xl bg-[#081022]/90 border border-[#38BDF8]/40 text-[#38BDF8] hover:text-[#00FF88] shadow-lg transition-colors"
         aria-label="Toggle Menu"
         type="button"
       >
-        {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
       </button>
 
       {/* Mobile Dropdown Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed top-[64px] md:top-[80px] left-0 right-0 p-4 bg-[#050914]/98 backdrop-blur-3xl border-b border-[#38BDF8]/30 shadow-2xl z-50 flex flex-col gap-2.5 animate-in fade-in slide-in-from-top-2 duration-200">
-          {NAV_ITEMS.map((item) => {
+        <div className="lg:hidden fixed top-[64px] md:top-[80px] left-0 right-0 p-4 bg-[#050914]/98 backdrop-blur-3xl border-b border-[#38BDF8]/30 shadow-2xl z-50 flex flex-col gap-2 animate-in fade-in slide-in-from-top-2 duration-200 max-h-[80vh] overflow-y-auto">
+          {NAV_ITEMS.map((item, idx) => {
             const Icon = item.icon
             const isActive = activeTab === item.id
+            const themeColor = item.color || '#38BDF8'
+            const isSeparatorBefore = idx === 5
 
             return (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item)}
-                className={`flex items-center justify-between p-4 rounded-xl transition-all duration-200 border ${
-                  isActive
-                    ? 'bg-[#38BDF8]/20 border-[#38BDF8]/60 text-white shadow-[0_0_16px_rgba(56,189,248,0.3)]'
-                    : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
-                }`}
-                type="button"
-              >
-                <div className="flex items-center gap-3.5">
-                  <Icon
-                    size={18}
-                    className={isActive ? 'text-[#00FF88]' : 'text-[#38BDF8]'}
-                  />
-                  <span className="font-space text-sm font-extrabold tracking-wider uppercase text-white">
-                    {item.label}
-                  </span>
-                </div>
-                {item.badge && (
-                  <span className="px-2.5 py-0.5 rounded-full text-[9.5px] font-mono font-extrabold bg-[#00FF88]/25 text-[#00FF88] border border-[#00FF88]/50 shadow-[0_0_8px_#00FF88]">
-                    {item.badge}
-                  </span>
+              <React.Fragment key={item.id}>
+                {isSeparatorBefore && (
+                  <div className="my-1 border-t border-white/10" aria-hidden="true" />
                 )}
-              </button>
+                <button
+                  onClick={() => handleNavClick(item)}
+                  className={`flex items-center justify-between p-3.5 rounded-xl transition-all duration-200 border cursor-pointer ${
+                    isActive
+                      ? 'bg-[#38BDF8]/20 text-white'
+                      : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                  }`}
+                  style={isActive ? { borderColor: themeColor } : {}}
+                  type="button"
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon
+                      size={16}
+                      style={{ color: isActive ? themeColor : '#38BDF8' }}
+                    />
+                    <span className="font-space text-xs font-extrabold tracking-wider uppercase text-white">
+                      {item.label}
+                    </span>
+                  </div>
+                </button>
+              </React.Fragment>
             )
           })}
         </div>
@@ -260,3 +207,4 @@ export default function TopNavMenu() {
     </>
   )
 }
+

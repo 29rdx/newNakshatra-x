@@ -56,14 +56,14 @@ const DEFAULT_MINE: MineInfo = {
 
 const STARTER_QUESTIONS = [
   'How does NAKSHATRA-X discover hidden manganese reserves?',
-  'Can we prevent monsoon pit flooding and shortfall?',
-  'Walk me through the SciPy ore blending optimization',
-  'What makes our satellite sensing so accurate?',
-  'How does 3D borehole Kriging work for Balaghat?',
-  'Guide me through Mission Control!',
+  'What are the main pages and features on the website?',
+  'How do we prevent monsoon pit flooding and shortfall?',
+  'Walk me through SciPy ore blending optimization',
+  'What is the 3D Mine Twin Digital Simulator?',
+  'Tell me about SIH Problem Statement 26009 for MOIL!',
 ]
 
-export default function AICopilotModal({ mine = DEFAULT_MINE, onOpenBlending, onOpenBorehole }: Props) {
+export default function AICopilotModal({ mine, onOpenBlending, onOpenBorehole }: Props) {
 
   const [isOpen, setIsOpen] = useState(false)
   const [input, setInput] = useState('')
@@ -84,7 +84,7 @@ export default function AICopilotModal({ mine = DEFAULT_MINE, onOpenBlending, on
     {
       id: 'welcome-1',
       sender: 'assistant',
-      text: `Hello! I'm your **NAKSHATRA-X** space-geological assistant. I'm here to help you navigate satellite discovery, SciPy ore blending, 3D Kriging assays, and mine operations. How can I assist you today?`,
+      text: `Hello! I'm your **NAKSHATRA-X** Space-Geological Assistant. I can guide you through all project features, website modules, satellite discovery math, SciPy ore blending, 3D Kriging, and SIH Problem Statement 26009 details. What would you like to know?`,
       timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }),
     },
   ])
@@ -131,9 +131,12 @@ export default function AICopilotModal({ mine = DEFAULT_MINE, onOpenBlending, on
     if (!customQuery) setInput('')
     setIsTyping(true)
 
-    // Execute On-Device RAG Answer Engine with Warm Human Response
+    // Execute On-Device RAG Answer Engine
     setTimeout(() => {
-      const result = queryAIXKnowledgeBase(query, mine.name, mine.code, mine.state)
+      const targetMineName = mine?.name || 'MOIL Central Mining Belt'
+      const targetMineCode = mine?.code || 'MOIL-PSU'
+      const targetState = mine?.state || 'India'
+      const result = queryAIXKnowledgeBase(query, targetMineName, targetMineCode, targetState)
 
       let replyText = ''
       let suggs: string[] = []
@@ -145,8 +148,13 @@ export default function AICopilotModal({ mine = DEFAULT_MINE, onOpenBlending, on
         suggs = (result.suggestions || []).map((s: any) => s.question)
         category = result.category || ''
       } else {
-        replyText = `Great question! While I look up more specific field logs for "${query}", here are some related topics we can explore together right now:`
+        replyText = result.answer || `I don't have a pre-set answer for "${query}".\n\nFor immediate contact and solving your problem, please email our lead engineering team directly at:\n\n📧 **s25cseu1930@bennett.edu.in**`
         suggs = (result.suggestions || []).map((s: any) => s.question)
+        category = 'Immediate Contact'
+        actionBtn = {
+          label: 'Email Support (s25cseu1930@bennett.edu.in)',
+          type: 'guidance',
+        }
       }
 
       const botMsg: Message = {
@@ -166,25 +174,12 @@ export default function AICopilotModal({ mine = DEFAULT_MINE, onOpenBlending, on
 
   const triggerAction = async (btn: NonNullable<Message['actionButton']>) => {
     if (btn.type === 'dewatering') {
-      try {
-        await fetch('/api/v1/dispatch-operational-alert', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            mine_id: mine.numericId || 1,
-            mine_name: mine.name,
-            alert_type: 'HAUL_ROAD_SATURATION',
-            severity: 'CRITICAL',
-            action_directive: 'Activate Perimeter Dewatering Pumps #4 & #7 immediately.',
-          }),
-        })
-      } catch {}
       setMessages((prev) => [
         ...prev,
         {
           id: `act-confirm-${Date.now()}`,
           sender: 'assistant',
-          text: `✅ **Emergency Dispatch Transmitted**: Dewatering order sent to ${mine.name} pit manager via SMS & SCADA Interlock.`,
+          text: `✅ **Emergency Dispatch Transmitted**: Dewatering order sent to pit manager via SCADA Interlock.`,
           timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }),
         },
       ])
@@ -194,7 +189,7 @@ export default function AICopilotModal({ mine = DEFAULT_MINE, onOpenBlending, on
         {
           id: `act-confirm-${Date.now()}`,
           sender: 'assistant',
-          text: `✅ **Stockpile Blending Applied**: Simplex solution dispatched to loader SCADA terminals. Target grade 41.2% Mn locked.`,
+          text: `✅ **Stockpile Blending Applied**: Simplex solution dispatched to loader SCADA terminals. Target grade ≥42% Mn locked.`,
           timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }),
         },
       ])
@@ -204,10 +199,16 @@ export default function AICopilotModal({ mine = DEFAULT_MINE, onOpenBlending, on
         {
           id: `act-confirm-${Date.now()}`,
           sender: 'assistant',
-          text: `✅ **Borehole Kriging Synced**: UNFC 111 3D block reserve of 384,000 Tonnes locked in system memory.`,
+          text: `✅ **Borehole Kriging Synced**: UNFC 111 3D block reserve locked in system memory.`,
           timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false }),
         },
       ])
+    } else if (btn.type === 'guidance') {
+      if (btn.label?.includes('s25cseu1930') || btn.label?.includes('Email')) {
+        window.location.href = 'mailto:s25cseu1930@bennett.edu.in'
+      } else {
+        window.location.href = '/features'
+      }
     }
   }
 
@@ -231,14 +232,14 @@ export default function AICopilotModal({ mine = DEFAULT_MINE, onOpenBlending, on
                       <span className="font-3d-cyber text-cyber-liquid-red ml-0.5 inline-block font-black text-base">
                         -X
                       </span>
-                      <span className="text-slate-300 font-semibold text-xs ml-1.5 font-mono">Space Assistant</span>
+                      <span className="text-slate-300 font-semibold text-xs ml-1.5 font-mono">Platform Copilot</span>
                     </h3>
                     <span className="ios-badge ios-badge-live text-[8px] py-0.5 px-2 font-mono font-bold whitespace-nowrap shrink-0">
                       100% FREE ON-DEVICE
                     </span>
                   </div>
                   <p className="text-[11px] font-mono text-slate-300">
-                    Active Mine: <span className="text-[#00FF88] font-bold">{mine.name} ({mine.code})</span>
+                    Project Scope: <span className="text-[#00FF88] font-bold">MOIL Manganese Mining &amp; Space Intelligence</span>
                   </p>
                 </div>
               </div>

@@ -317,12 +317,12 @@ body {
 }
 
 .text-cyber-liquid-red {
-  background: linear-gradient(135deg, #FF3366 0%, #FF6B8B 30%, #00FF88 75%, #38BDF8 100%);
+  background: linear-gradient(135deg, #FF0033 0%, #FF2E63 45%, #D90429 70%, #990022 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4);
-  filter: drop-shadow(0 0 14px rgba(255, 51, 102, 0.7)) drop-shadow(0 0 24px rgba(0, 255, 136, 0.5));
+  filter: drop-shadow(0 0 18px rgba(255, 0, 51, 0.95)) drop-shadow(0 0 30px rgba(217, 4, 41, 0.8));
 }
 
 .font-3d-cyber-surface {

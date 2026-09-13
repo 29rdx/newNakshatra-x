@@ -157,10 +157,78 @@ export const knowledgeBase: KnowledgeChunk[] = [
   {
     id: 'k15',
     category: 'team',
-    keywords: ['team', 'built', 'sih', '26009', 'people', 'hackathon', 'who'],
-    question: 'Who built NAKSHATRA-X and what is problem statement 26009?',
+    keywords: ['team', 'built', 'sih', '26009', 'people', 'hackathon', 'who', 'problem statement'],
+    question: 'Who built NAKSHATRA-X and what is SIH Problem Statement 26009?',
     answer:
-      "NAKSHATRA-X is built for Smart India Hackathon (SIH Problem Statement 26009 for Ministry of Steel & MOIL Ltd). We are an interdisciplinary team bridging aerospace telemetry, geological engineering, and high-performance AI systems to deliver sovereign industrial solutions for India.",
+      "NAKSHATRA-X is built for Smart India Hackathon 2026 (SIH Problem Statement 26009 for Ministry of Steel & MOIL Limited). We bridge aerospace satellite telemetry, 3D Kriging geological math, and SciPy linear optimization to solve manganese ore production shortfalls across Indian PSU mines.",
+  },
+  {
+    id: 'k16',
+    category: 'operations',
+    keywords: ['website', 'pages', 'navigation', 'menu', 'structure', 'how to use', 'features list', 'where'],
+    question: 'What are the main pages and features on the NAKSHATRA-X website?',
+    answer:
+      "The platform features 7 dedicated modules:\n1. Mission Control (Landing Page `/`): Real-time satellite maps, SCADA telemetry, and Live Stream Sync.\n2. ML Studio (`/evaluator`): XGBoost, Random Forest, & SciPy model accuracy metrics & training studio.\n3. Mine Twin (`/mine-twin`): 3D interactive discrete-event haulage simulator.\n4. Production (`/production`): Pit wall InSAR stability & automated pump interlocks.\n5. Ore Blending (`/blending`): SciPy LP Simplex solver for stockpile ratio optimization.\n6. All Features (`/features`): Complete index of all 8 space-geological modules.\n7. About Page (`/about`): SIH Problem Statement 26009 details, background, and expected solution.",
+    actionButton: {
+      label: 'Explore All Features Page',
+      type: 'guidance',
+    },
+  },
+  {
+    id: 'k17',
+    category: 'features',
+    keywords: ['ml studio', 'evaluator', 'training', 'xgboost', 'prophet', 'confusion matrix', 'roc auc'],
+    question: 'What can I do in the ML Studio (Page 2 /evaluator)?',
+    answer:
+      "The ML Studio allows geologists and engineers to inspect live model performance: Random Forest (98.7% accuracy, 0.995 ROC-AUC), XGBoost + Prophet 14-day production forecasts, TreeSHAP feature attribution (rainfall 34.2%, fault distance 28.1%), and confusion matrix validation against 10.8k core drill logs.",
+  },
+  {
+    id: 'k18',
+    category: 'operations',
+    keywords: ['mine twin', '3d twin', 'dumper', 'excavator', 'fuel burn', 'cycle time', 'simulation'],
+    question: 'What is the 3D Mine Twin Digital Simulator (Page 3 /mine-twin)?',
+    answer:
+      "The Mine Twin is a 3D Canvas flight simulator for open-pit operations. It models shovel cycle times (-340m RL pit floor to surface winder), dumper dispatch queues, and fuel burn optimization—cutting diesel consumption by 11.4% (saving ₹55 Lakhs/yr per fleet) and recovering +2,420 tonnes of ore per quarter.",
+  },
+  {
+    id: 'k19',
+    category: 'features',
+    keywords: ['production', 'sentinel', 'pumps', 'dewatering', 'scada', 'haul road', 'interlock'],
+    question: 'How does Production Sentinel (Page 4 /production) work?',
+    answer:
+      "Production Sentinel monitors pit wall InSAR radar sensors and haul road precipitation in real-time. When rainfall exceeds 20mm/hr, it transmits automatic MQTT interlock signals to perimeter pumps #4 & #7—preventing pit drowning and keeping haul roads operational during heavy monsoons.",
+    actionButton: {
+      label: 'Broadcast Emergency Dewatering Dispatch',
+      type: 'dewatering',
+    },
+  },
+  {
+    id: 'k20',
+    category: 'features',
+    keywords: ['ore blending', 'blending', 'stockpile', 'scipy', 'simplex', 'grade', '42%'],
+    question: 'How does Ore Blending Optimization (Page 5 /blending) work?',
+    answer:
+      "The Ore Blending module uses a SciPy Simplex Linear Programming (LP) solver to combine high-grade ore (SP-1) with low-grade dump material (SP-2/SP-3). In <200ms, it locks target specs (≥42% Mn purity), eliminating 100% of grade penalty deductions and saving ₹2.8 Crores per million tonnes exported.",
+    actionButton: {
+      label: 'Run Simplex Ore Blending Solver',
+      type: 'blending',
+    },
+  },
+  {
+    id: 'k21',
+    category: 'project',
+    keywords: ['about', 'sih', 'problem statement', 'moil', 'background', 'ministry of steel', 'details'],
+    question: 'What is documented on the About Page (/about)?',
+    answer:
+      "The About Page details the SIH Problem Statement 26009 for MOIL Limited & Ministry of Steel. It highlights the background of monsoon mining disruptions in Central India, the expected solution (space-geological AI + SCADA integration), and national impact metrics.",
+  },
+  {
+    id: 'k22',
+    category: 'security',
+    keywords: ['login', 'sign in', 'admin', 'auth', 'google', 'otp', 'guest', 'portal'],
+    question: 'How do operators and administrators sign in?',
+    answer:
+      "Operators can log in via:\n1. 6-Digit Email OTP: Sent directly to your inbox.\n2. Google One-Click OAuth: Instant profile synchronization.\n3. Guest Mode: Instant zero-setup trial access.\n4. Admin Portal (`/admin/login`): Secured master clearance for Chief Orbital Commanders.",
   },
 ]
 

@@ -58,22 +58,18 @@ export function queryAIXKnowledgeBase(query: string, mineName: string, mineCode:
     return res
   }
 
-  // 3. DEFAULT HIGH-ACCURACY RESPONSE
+  // 3. UNMATCHED / RANDOM QUESTION IMMEDIATE SUPPORT RESPONSE
   return {
-    matched: true,
-    answer: `**AI-X Solution for "${query}"**:\n\n` +
-      `Here is the operational telemetry and system guidance for **${mineName}** (${mineCode}):\n\n` +
-      `• **Site Operational Grid**: ${mineCode} (${state} Sector)\n` +
-      `• **AI Prospectivity**: Random Forest Classifier running at 98.7% accuracy (0.995 ROC-AUC).\n` +
-      `• **SciPy Simplex Ore Blending**: LP Stockpile solver allocating SP-1, SP-2, and SP-3 stockpiles for target specs (≥41% Mn).\n` +
-      `• **3D Borehole Kriging**: Interpolates diamond core drill assays for UNFC 111 proved reserves.\n` +
-      `• **Shortfall Prevention**: 14-day production forecasting with SCADA dewatering pump interlocks.\n\n` +
-      `*Tip: Try asking "What is NAKSHATRA-X?", "Which AI models are used?", "How is shortfall predicted?", or "What satellite inputs are used?"*`,
-    category: 'system',
-    suggestions: knowledgeBase.slice(3, 6).map(k => k),
+    matched: false,
+    answer: `I don't have a pre-set answer in my current knowledge base for your question:\n*"${query}"*\n\n` +
+      `For immediate contact and fast resolution to your issue, please email our lead development team directly at:\n\n` +
+      `📧 **s25cseu1930@bennett.edu.in**\n\n` +
+      `Our engineering team will assist you immediately with your query!`,
+    category: 'Immediate Support Contact',
+    suggestions: knowledgeBase.slice(0, 4).map(k => k),
     actionButton: {
-      label: 'Run Simplex Ore Blending Solver',
-      type: 'blending' as const,
+      label: 'Email Support (s25cseu1930@bennett.edu.in)',
+      type: 'guidance' as const,
     },
   }
 }
