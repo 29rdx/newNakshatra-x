@@ -441,6 +441,28 @@ export default function MissionControlDashboard() {
         </div>
 
         {/* ============================================================
+            MINE TWIN FEATURE SECTION (FEATURE 03 & 50-YR HISTORY / 2040 FORECAST)
+            ============================================================ */}
+        <div id="mine-twin" className="pt-8 border-t border-white/10 space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#00FF88] animate-ping" />
+              <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#00FF88]">
+                FEATURE 03 &bull; MINE TWIN SIMULATOR &bull; 50-YEAR HISTORY &amp; 2040 AI FORECAST
+              </h3>
+            </div>
+            <Link
+              href="/mine-twin"
+              className="text-xs font-mono text-[#00FF88] bg-[#00FF88]/10 border border-[#00FF88]/40 hover:bg-[#00FF88]/20 px-3 py-1 rounded-full font-bold transition-all"
+            >
+              OPEN FULL PAGE 3 &rarr;
+            </Link>
+          </div>
+
+          <MineTwinPanel selectedMine={selectedMine} />
+        </div>
+
+        {/* ============================================================
             EXECUTIVE FOOTER (Light Liquid Glass)
             ============================================================ */}
         <div className="ios-glass-card p-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#94A3B8]">

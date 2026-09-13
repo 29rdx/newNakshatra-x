@@ -28,15 +28,17 @@ import {
   FutureForecastRecord,
   DataSourceCitation,
   OFFICIAL_DATA_SOURCES,
+  HISTORICAL_DATABASE_1977_2026,
+  FUTURE_FORECASTS_2026_2040,
   getCombinedHistoricalAndFutureData,
   computeDynamicPredictions,
 } from '@/lib/historical-database'
 
 export default function HistoricalForecastGlassVisualizer() {
-  const [historyData, setHistoryData] = useState<HistoricalYearRecord[]>([])
-  const [futureData, setFutureData] = useState<FutureForecastRecord[]>([])
+  const [historyData, setHistoryData] = useState<HistoricalYearRecord[]>(HISTORICAL_DATABASE_1977_2026)
+  const [futureData, setFutureData] = useState<FutureForecastRecord[]>(FUTURE_FORECASTS_2026_2040)
   const [citations, setCitations] = useState<DataSourceCitation[]>(OFFICIAL_DATA_SOURCES)
-  const [summaryStats, setSummaryStats] = useState<any>(null)
+  const [summaryStats, setSummaryStats] = useState<any>(getCombinedHistoricalAndFutureData().summaryStats)
 
   // Filter and Interactive Selection States
   const [selectedRange, setSelectedRange] = useState<'all' | 'history' | 'forecast' | '1977-2000' | '2001-2025'>('all')
