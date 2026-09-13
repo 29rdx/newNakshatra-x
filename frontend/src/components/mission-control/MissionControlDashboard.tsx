@@ -384,11 +384,16 @@ export default function MissionControlDashboard() {
                   </span>
                   <Activity size={22} className="text-[#38BDF8] drop-shadow-[0_0_12px_#38BDF8]" />
                 </div>
-                <h4 className="text-xl font-bold font-space text-white group-hover:text-[#38BDF8] transition-colors mb-2">
+                <h4 className="text-xl font-bold font-space text-white group-hover:text-[#38BDF8] transition-colors mb-1.5">
                   Production Sentinel
                 </h4>
+                <div className="mb-2">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-mono font-extrabold text-[#00E5FF] bg-[#00E5FF]/15 border border-[#00E5FF]/40 px-2.5 py-0.5 rounded-full">
+                    NEW: Early Flood Warning &amp; Auto-Pumps
+                  </span>
+                </div>
                 <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed mb-6 font-normal">
-                  Extraction velocity meter, target deviation alerts, and automated weather risk warning cockpits.
+                  ISRO rain radar 30-min cloudburst predictor, automated SCADA pump control, and extraction velocity meters.
                 </p>
               </div>
               <Link
