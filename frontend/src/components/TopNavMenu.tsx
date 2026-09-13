@@ -122,7 +122,7 @@ export default function TopNavMenu() {
   return (
     <>
       {/* Desktop / Laptop Clean Liquid Glass Navigation Capsule */}
-      <nav className="hidden lg:flex items-center justify-center gap-1.5 lg:gap-2 cyber-nav-pill px-4 py-2 shadow-2xl max-w-full mx-auto flex-nowrap shrink-0 border border-[#38BDF8]/40 bg-[#060C1B]/90 backdrop-blur-2xl rounded-full shadow-[0_0_25px_rgba(6,12,27,0.8)]">
+      <nav className="hidden lg:flex items-center justify-center gap-1 xl:gap-1.5 cyber-nav-pill px-2.5 lg:px-3 py-1.5 shadow-2xl max-w-full mx-auto flex-nowrap shrink border border-[#38BDF8]/40 bg-[#060C1B]/95 backdrop-blur-2xl rounded-full shadow-[0_0_25px_rgba(6,12,27,0.8)] overflow-hidden">
         {NAV_ITEMS.map((item, idx) => {
           const Icon = item.icon
           const isActive = activeTab === item.id
@@ -132,11 +132,11 @@ export default function TopNavMenu() {
           return (
             <React.Fragment key={item.id}>
               {isSeparatorBefore && (
-                <div className="h-4 w-px bg-white/20 mx-1 shrink-0" aria-hidden="true" />
+                <div className="h-3.5 w-px bg-white/20 mx-0.5 shrink-0" aria-hidden="true" />
               )}
               <button
                 onClick={() => handleNavClick(item)}
-                className={`px-3.5 lg:px-4 xl:px-4.5 py-2 rounded-full font-mono font-bold transition-all duration-200 cursor-pointer flex items-center gap-2 whitespace-nowrap shrink-0 border ${
+                className={`px-2 lg:px-2.5 xl:px-3 py-1.5 rounded-full font-mono font-bold transition-all duration-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0 border ${
                   isActive
                     ? 'bg-white/15 text-white shadow-lg'
                     : 'bg-transparent text-slate-300 border-transparent hover:bg-white/10 hover:text-white'
@@ -145,19 +145,20 @@ export default function TopNavMenu() {
                   isActive
                     ? {
                         borderColor: themeColor,
-                        boxShadow: `0 0 14px ${themeColor}50`,
+                        boxShadow: `0 0 12px ${themeColor}50`,
                       }
                     : {}
                 }
                 type="button"
               >
                 <Icon
-                  size={14}
+                  size={13}
                   className="transition-colors duration-200 shrink-0"
                   style={{ color: isActive ? themeColor : '#38BDF8' }}
                 />
-                <span className="font-space text-xs lg:text-[12.5px] xl:text-[13px] font-extrabold uppercase tracking-wider">
-                  {item.label}
+                <span className="font-space text-[10.5px] lg:text-[11px] xl:text-[12px] font-extrabold uppercase tracking-wider">
+                  <span className="xl:inline hidden">{item.label}</span>
+                  <span className="xl:hidden inline">{item.shortLabel || item.label}</span>
                 </span>
               </button>
             </React.Fragment>

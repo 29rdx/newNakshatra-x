@@ -19,7 +19,7 @@ export default function TopBanner() {
       </div>
 
       {/* Center zone: Cyber Theme Menu Section */}
-      <div className="flex-1 flex items-center justify-center min-w-0 px-1 overflow-x-auto no-scrollbar z-10" id="top-banner-menu-slot">
+      <div className="flex-1 flex items-center justify-center min-w-0 px-1 overflow-hidden shrink z-10" id="top-banner-menu-slot">
         <TopNavMenu />
       </div>
 
