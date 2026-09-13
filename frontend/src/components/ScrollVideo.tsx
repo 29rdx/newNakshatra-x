@@ -299,12 +299,12 @@ export default function ScrollVideo() {
                 </span>
               </div>
 
-              {/* White & Neon Green Centerpiece Typography NAKSHATRA-X */}
+              {/* Centerpiece Title - Matched 100% to Header Button Logo (font-3d-cyber, White NAKSHATRA & text-cyber-liquid-red -X) */}
               <div className="relative z-10 flex items-center justify-center whitespace-nowrap flex-nowrap select-none my-2.5 pointer-events-none">
-                <span className="font-space text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-black tracking-[0.16em] sm:tracking-[0.20em] uppercase bg-gradient-to-r from-[#FFFFFF] via-[#F0FFF4] via-[#A3FFD6] to-[#00FF88] bg-clip-text text-transparent drop-shadow-[0_0_22px_rgba(0,255,136,0.7)] drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+                <span className="font-3d-cyber text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-bold tracking-[0.22em] uppercase text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.6)] drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
                   NAKSHATRA
                 </span>
-                <span className="font-space text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-black tracking-[0.16em] sm:tracking-[0.20em] bg-gradient-to-r from-[#00FF88] via-[#00E676] to-[#38BDF8] bg-clip-text text-transparent ml-1 sm:ml-1.5 drop-shadow-[0_0_22px_rgba(0,255,136,0.8)] drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+                <span className="font-3d-cyber text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-bold tracking-[0.22em] text-cyber-liquid-red ml-1 sm:ml-1.5 inline-block drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
                   -X
                 </span>
               </div>
