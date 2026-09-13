@@ -87,3 +87,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+.vercel
+.env*
