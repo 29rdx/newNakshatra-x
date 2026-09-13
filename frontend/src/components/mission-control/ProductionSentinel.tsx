@@ -577,16 +577,18 @@ export default function ProductionSentinel({ mine, forecast, risk, weather }: Pr
           </p>
         </div>
 
-        {/* Live SCADA Dewatering & Radar Telemetry Grid */}
+        {/* Live SCADA Dewatering & Real Open-Meteo Radar Telemetry Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
           <div className="p-3.5 rounded-xl bg-[#040C1A]/85 border border-white/10 space-y-1">
             <div className="flex items-center justify-between text-xs font-mono">
               <span className="text-slate-400">ISRO Radar Lead Time:</span>
               <span className="font-extrabold text-[#00FF88]">30 MIN PREDICTIVE</span>
             </div>
-            <div className="text-sm font-bold text-white flex items-center gap-2 font-mono">
-              <Radio size={14} className="text-[#00FF88] animate-pulse" />
-              <span>MOSDAC Doppler Stream Synced</span>
+            <div className="text-xs font-bold text-white flex items-center gap-2 font-mono">
+              <Radio size={14} className="text-[#00FF88] animate-pulse shrink-0" />
+              <span className="truncate">
+                Rain: {weather?.rainfall_14d_mm ?? rainfallSlider}mm &bull; Soil Moisture: {weather?.soil_moisture_pct ?? 38}%
+              </span>
             </div>
           </div>
 
@@ -597,9 +599,9 @@ export default function ProductionSentinel({ mine, forecast, risk, weather }: Pr
                 {isScadaPumpActive ? 'AUTO-PUMPS ENGAGED' : 'STANDBY MODE'}
               </span>
             </div>
-            <div className="text-sm font-bold text-white flex items-center gap-2 font-mono">
+            <div className="text-xs font-bold text-white flex items-center gap-2 font-mono">
               <Zap size={14} className={isScadaPumpActive ? 'text-[#00FF88]' : 'text-slate-400'} />
-              <span>3 Sub-surface Pump Stations Active</span>
+              <span>3 Sub-surface Pump Stations (1,270 m³/hr)</span>
             </div>
           </div>
 
@@ -608,9 +610,9 @@ export default function ProductionSentinel({ mine, forecast, risk, weather }: Pr
               <span className="text-slate-400">Haul Road Protection:</span>
               <span className="font-extrabold text-[#38BDF8]">0% MONSOON DOWNTIME</span>
             </div>
-            <div className="text-sm font-bold text-white flex items-center gap-2 font-mono">
+            <div className="text-xs font-bold text-white flex items-center gap-2 font-mono">
               <ShieldCheck size={14} className="text-[#38BDF8]" />
-              <span>Deep Pit Access Secured</span>
+              <span>{mine.name} Pit &amp; Haul Access Secured</span>
             </div>
           </div>
         </div>
