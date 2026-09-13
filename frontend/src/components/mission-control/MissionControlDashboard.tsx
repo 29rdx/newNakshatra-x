@@ -16,8 +16,6 @@ import JudgesArchitectureDeck from './JudgesArchitectureDeck'
 import RealtimeMLTrainingStudio from './RealtimeMLTrainingStudio'
 import ProductionSentinel from './ProductionSentinel'
 import RiskCockpit from './RiskCockpit'
-import SmartOreBlendingModal from './SmartOreBlendingModal'
-import MineTwinPanel from '@/components/mine-twin/MineTwinPanel'
 import SpaceDustParticles from './SpaceDustParticles'
 import AICopilotModal from './AICopilotModal'
 import { TextEffect } from '@/components/ui/text-effect'
@@ -438,28 +436,6 @@ export default function MissionControlDashboard() {
               </Link>
             </div>
           </div>
-        </div>
-
-        {/* ============================================================
-            MINE TWIN FEATURE SECTION (FEATURE 03 & 50-YR HISTORY / 2040 FORECAST)
-            ============================================================ */}
-        <div id="mine-twin" className="pt-8 border-t border-white/10 space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#00FF88] animate-ping" />
-              <h3 className="text-xs font-mono font-black uppercase tracking-widest text-[#00FF88]">
-                FEATURE 03 &bull; MINE TWIN &bull; 3D SIMULATOR &amp; REAL DATA ANALYTICS
-              </h3>
-            </div>
-            <Link
-              href="/mine-twin"
-              className="text-xs font-mono text-[#00FF88] bg-[#00FF88]/10 border border-[#00FF88]/40 hover:bg-[#00FF88]/20 px-3 py-1 rounded-full font-bold transition-all"
-            >
-              OPEN FULL PAGE 3 &rarr;
-            </Link>
-          </div>
-
-          <MineTwinPanel selectedMine={selectedMine} />
         </div>
 
         {/* ============================================================
