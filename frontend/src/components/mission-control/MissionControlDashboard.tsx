@@ -15,8 +15,8 @@ import IndiaSatelliteMap, { LayerType } from './IndiaSatelliteMap'
 import JudgesArchitectureDeck from './JudgesArchitectureDeck'
 import RealtimeMLTrainingStudio from './RealtimeMLTrainingStudio'
 import ProductionSentinel from './ProductionSentinel'
-import RiskCockpit from './RiskCockpit'
 import SpaceDustParticles from './SpaceDustParticles'
+import LocationFloodAlertFinder from './LocationFloodAlertFinder'
 import AICopilotModal from './AICopilotModal'
 import { TextEffect } from '@/components/ui/text-effect'
 import {
@@ -222,6 +222,11 @@ export default function MissionControlDashboard() {
             </div>
           </div>
         </div>
+
+        {/* ============================================================
+            ENTER LOCATION & FIND REAL-TIME SATELLITE FLOOD ALERT WIDGET
+            ============================================================ */}
+        <LocationFloodAlertFinder onSelectMine={(m) => setSelectedMine(m)} />
 
         {/* ============================================================
             MINE SITE SEARCH & LIVE SATELLITE FLOOD ALERT DOCK
