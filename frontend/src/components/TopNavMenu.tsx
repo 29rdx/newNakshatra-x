@@ -15,6 +15,7 @@ import {
   Home,
   Sparkles,
   Info,
+  CloudRain,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -51,6 +52,14 @@ const NAV_ITEMS: NavItem[] = [
     icon: Box,
     href: '/mine-twin',
     color: '#00FF88',
+  },
+  {
+    id: 'flood-alert',
+    label: 'Flood Alert',
+    shortLabel: 'Flood Alert',
+    icon: CloudRain,
+    href: '/flood-alert',
+    color: '#00E5FF',
   },
   {
     id: 'production',
@@ -95,6 +104,7 @@ export default function TopNavMenu() {
     if (pathname === '/') return 'mission-control'
     if (pathname.startsWith('/evaluator')) return 'evaluator'
     if (pathname.startsWith('/mine-twin')) return 'mine-twin'
+    if (pathname.startsWith('/flood-alert')) return 'flood-alert'
     if (pathname.startsWith('/production')) return 'production'
     if (pathname.startsWith('/blending')) return 'blending'
     if (pathname.startsWith('/features')) return 'all-features'
